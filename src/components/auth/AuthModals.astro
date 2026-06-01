@@ -1,0 +1,217 @@
+---
+---
+<!-- Login Modal -->
+<div id="loginModal" class="fixed inset-0 z-[120] hidden items-center justify-center p-4">
+  <div class="absolute inset-0 bg-navy/60 backdrop-blur-sm animate-fade-in" id="loginBackdrop"></div>
+  <div class="bg-white rounded-3xl p-8 max-w-md w-full relative z-10 transform scale-95 opacity-0 transition-all duration-300 shadow-2xl border border-slate-100" id="loginContent">
+    <button id="closeLoginBtn" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors">
+      <i class="ph ph-x text-2xl"></i>
+    </button>
+    <h3 class="text-2xl font-bold text-navy mb-2">Masuk ke Akun Anda</h3>
+    <p class="text-slate-500 text-sm mb-6">Silakan login untuk melakukan pemesanan mobil.</p>
+    
+    <div id="loginError" class="hidden bg-red-50 text-red-600 text-sm p-4 rounded-xl mb-4 border border-red-100"></div>
+
+    <form id="loginForm" class="space-y-4">
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1">Email</label>
+        <input type="email" id="loginEmail" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-slate-800 text-sm" placeholder="nama@email.com" />
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1">Password</label>
+        <input type="password" id="loginPassword" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-slate-800 text-sm" placeholder="••••••••" />
+      </div>
+      <button type="submit" class="w-full py-3 bg-primary hover:bg-blue-700 text-white font-bold rounded-xl transition-colors text-sm shadow-md">Masuk</button>
+    </form>
+    <p class="text-slate-500 text-sm text-center mt-6">
+      Belum punya akun? <button id="switchToRegister" class="text-primary font-semibold hover:underline">Daftar sekarang</button>
+    </p>
+  </div>
+</div>
+
+<!-- Register Modal -->
+<div id="registerModal" class="fixed inset-0 z-[120] hidden items-center justify-center p-4">
+  <div class="absolute inset-0 bg-navy/60 backdrop-blur-sm animate-fade-in" id="registerBackdrop"></div>
+  <div class="bg-white rounded-3xl p-8 max-w-md w-full relative z-10 transform scale-95 opacity-0 transition-all duration-300 shadow-2xl border border-slate-100" id="registerContent">
+    <button id="closeRegisterBtn" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors">
+      <i class="ph ph-x text-2xl"></i>
+    </button>
+    <h3 class="text-2xl font-bold text-navy mb-2">Daftar Akun Baru</h3>
+    <p class="text-slate-500 text-sm mb-6">Lengkapi data di bawah untuk membuat akun KGYK.</p>
+
+    <div id="registerError" class="hidden bg-red-50 text-red-600 text-sm p-4 rounded-xl mb-4 border border-red-100"></div>
+
+    <form id="registerForm" class="space-y-4 max-h-[60vh] overflow-y-auto pr-1">
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Lengkap</label>
+        <input type="text" id="registerName" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-slate-800 text-sm" placeholder="Nama lengkap Anda" />
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1">Email</label>
+        <input type="email" id="registerEmail" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-slate-800 text-sm" placeholder="nama@email.com" />
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1">Nomor Telepon (Aktif)</label>
+        <input type="tel" id="registerPhone" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-slate-800 text-sm" placeholder="0812xxxxxxxx" />
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1">Password (Min. 8 karakter)</label>
+        <input type="password" id="registerPassword" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-slate-800 text-sm" placeholder="••••••••" />
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1">Konfirmasi Password</label>
+        <input type="password" id="registerConfirmPassword" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-slate-800 text-sm" placeholder="••••••••" />
+      </div>
+      <button type="submit" class="w-full py-3 bg-primary hover:bg-blue-700 text-white font-bold rounded-xl transition-colors text-sm shadow-md mt-2">Daftar Akun</button>
+    </form>
+    <p class="text-slate-500 text-sm text-center mt-6">
+      Sudah punya akun? <button id="switchToLogin" class="text-primary font-semibold hover:underline">Masuk disini</button>
+    </p>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const loginModal = document.getElementById("loginModal");
+    const loginContent = document.getElementById("loginContent");
+    const registerModal = document.getElementById("registerModal");
+    const registerContent = document.getElementById("registerContent");
+    
+    // Switch triggers
+    const switchToRegister = document.getElementById("switchToRegister");
+    const switchToLogin = document.getElementById("switchToLogin");
+    
+    // Close triggers
+    const closeLoginBtn = document.getElementById("closeLoginBtn");
+    const loginBackdrop = document.getElementById("loginBackdrop");
+    const closeRegisterBtn = document.getElementById("closeRegisterBtn");
+    const registerBackdrop = document.getElementById("registerBackdrop");
+
+    // Forms & Errors
+    const loginForm = document.getElementById("loginForm");
+    const loginError = document.getElementById("loginError");
+    const registerForm = document.getElementById("registerForm");
+    const registerError = document.getElementById("registerError");
+
+    if (!loginModal || !loginContent || !registerModal || !registerContent) return;
+
+    const showModal = (modal: HTMLElement, content: HTMLElement) => {
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      setTimeout(() => {
+        content.classList.remove("scale-95", "opacity-0");
+        content.classList.add("scale-100", "opacity-100");
+      }, 10);
+    };
+
+    const hideModal = (modal: HTMLElement, content: HTMLElement) => {
+      content.classList.remove("scale-100", "opacity-100");
+      content.classList.add("scale-95", "opacity-0");
+      setTimeout(() => {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+      }, 300);
+    };
+
+    const openLogin = () => {
+      if (loginError) loginError.classList.add("hidden");
+      hideModal(registerModal, registerContent);
+      showModal(loginModal, loginContent);
+    };
+
+    const openRegister = () => {
+      if (registerError) registerError.classList.add("hidden");
+      hideModal(loginModal, loginContent);
+      showModal(registerModal, registerContent);
+    };
+
+    // Attach to window so other components can call it
+    (window as any).openLoginModal = openLogin;
+    (window as any).openRegisterModal = openRegister;
+
+    switchToRegister?.addEventListener("click", openRegister);
+    switchToLogin?.addEventListener("click", openLogin);
+
+    closeLoginBtn?.addEventListener("click", () => hideModal(loginModal, loginContent));
+    loginBackdrop?.addEventListener("click", () => hideModal(loginModal, loginContent));
+    
+    closeRegisterBtn?.addEventListener("click", () => hideModal(registerModal, registerContent));
+    registerBackdrop?.addEventListener("click", () => hideModal(registerModal, registerContent));
+
+    // Form logic: Register
+    registerForm?.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (!registerError) return;
+      registerError.classList.add("hidden");
+
+      const fullName = (document.getElementById("registerName") as HTMLInputElement).value.trim();
+      const email = (document.getElementById("registerEmail") as HTMLInputElement).value.trim();
+      const phone = (document.getElementById("registerPhone") as HTMLInputElement).value.trim();
+      const password = (document.getElementById("registerPassword") as HTMLInputElement).value;
+      const confirmPassword = (document.getElementById("registerConfirmPassword") as HTMLInputElement).value;
+
+      if (password.length < 8) {
+        registerError.innerText = "Password minimal harus 8 karakter.";
+        registerError.classList.remove("hidden");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        registerError.innerText = "Password dan konfirmasi password tidak cocok.";
+        registerError.classList.remove("hidden");
+        return;
+      }
+
+      const users = JSON.parse(localStorage.getItem("kgyk_users") || "[]");
+      const emailExists = users.some((u: any) => u.email.toLowerCase() === email.toLowerCase());
+
+      if (emailExists) {
+        registerError.innerText = "Email sudah terdaftar dengan akun lain.";
+        registerError.classList.remove("hidden");
+        return;
+      }
+
+      // Add user
+      const newUser = { fullName, email, phone, password };
+      users.push(newUser);
+      localStorage.setItem("kgyk_users", JSON.stringify(users));
+
+      // Auto login after register
+      localStorage.setItem("kgyk_current_user", JSON.stringify(newUser));
+
+      // Dispatch event
+      window.dispatchEvent(new CustomEvent("auth-changed"));
+
+      hideModal(registerModal, registerContent);
+      (registerForm as HTMLFormElement).reset();
+
+      // Trigger success notification
+      alert(`Pendaftaran berhasil! Selamat datang, ${fullName}.`);
+    });
+
+    // Form logic: Login
+    loginForm?.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (!loginError) return;
+      loginError.classList.add("hidden");
+
+      const email = (document.getElementById("loginEmail") as HTMLInputElement).value.trim().toLowerCase();
+      const password = (document.getElementById("loginPassword") as HTMLInputElement).value;
+
+      const users = JSON.parse(localStorage.getItem("kgyk_users") || "[]");
+      const user = users.find((u: any) => u.email.toLowerCase() === email && u.password === password);
+
+      if (!user) {
+        loginError.innerText = "Email atau password salah.";
+        loginError.classList.remove("hidden");
+        return;
+      }
+
+      localStorage.setItem("kgyk_current_user", JSON.stringify(user));
+      window.dispatchEvent(new CustomEvent("auth-changed"));
+
+      hideModal(loginModal, loginContent);
+      (loginForm as HTMLFormElement).reset();
+    });
+  });
+</script>

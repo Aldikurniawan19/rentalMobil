@@ -185,6 +185,14 @@
 
     // Global bookCar mapping
     (window as any).bookCar = (carName: string) => {
+      const currentUser = JSON.parse(localStorage.getItem("kgyk_current_user") || "null");
+      if (!currentUser) {
+        if ((window as any).openLoginModal) {
+          (window as any).openLoginModal();
+        }
+        return;
+      }
+
       const formSection = document.getElementById("reservasi");
       if (formSection) {
         formSection.scrollIntoView({ behavior: "smooth" });

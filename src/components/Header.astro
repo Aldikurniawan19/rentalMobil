@@ -23,12 +23,60 @@
 
       <!-- CTA & Mobile Toggle -->
       <div class="flex items-center gap-4">
-        <a
-          href="#mobil"
-          class="hidden lg:inline-flex items-center justify-center px-6 py-2.5 border border-transparent text-sm font-bold rounded-full text-navy bg-accent hover:bg-yellow-500 hover:shadow-lg hover:shadow-accent/20 hover:-translate-y-0.5 transition-all duration-300"
+        <!-- Guest State CTA -->
+        <button
+          id="guest-cta"
+          class="hidden lg:inline-flex items-center justify-center px-6 py-2.5 border border-transparent text-sm font-bold rounded-full text-navy bg-accent hover:bg-yellow-500 hover:shadow-lg hover:shadow-accent/20 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
         >
-          Booking Sekarang
-        </a>
+          Masuk / Daftar
+        </button>
+
+        <!-- User State Profile Dropdown -->
+        <div id="user-cta" class="hidden relative items-center">
+          <button
+            id="profile-dropdown-btn"
+            class="inline-flex items-center gap-2.5 px-4 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-200/60 rounded-full text-slate-800 text-sm font-bold transition-all duration-300 cursor-pointer select-none"
+          >
+            <div class="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-extrabold" id="user-initial-container">
+              <span id="user-initial">U</span>
+            </div>
+            <span id="user-name-display" class="text-sm font-bold truncate max-w-[120px]">User</span>
+            <i class="ph ph-caret-down text-xs transition-transform duration-300" id="dropdown-caret"></i>
+          </button>
+          
+          <!-- Dropdown Menu -->
+          <div
+            id="profile-dropdown-menu"
+            class="hidden absolute right-0 top-full mt-2 w-56 bg-white border border-slate-100 rounded-2xl shadow-xl py-2 z-50 animate-fade-in"
+          >
+            <div class="px-4 py-2.5 border-b border-slate-50">
+              <p class="text-xs text-slate-400">Masuk sebagai</p>
+              <p id="dropdown-user-email" class="text-xs font-bold text-navy truncate"></p>
+            </div>
+            
+            <div class="py-1">
+              <a
+                href="#reservasi"
+                id="dropdown-history-btn"
+                class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 hover:text-primary transition-all cursor-pointer"
+              >
+                <i class="ph ph-clock-counter-clockwise text-lg text-slate-400"></i>
+                <span>Riwayat Sewa</span>
+              </a>
+            </div>
+            
+            <div class="border-t border-slate-50 pt-1">
+              <button
+                id="dropdown-logout-btn"
+                class="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-all cursor-pointer"
+              >
+                <i class="ph ph-sign-out text-lg"></i>
+                <span>Keluar</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
         <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg transition-colors focus:outline-none">
           <i class="ph ph-list text-2xl"></i>
         </button>
@@ -44,7 +92,29 @@
       <a href="#mobil" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link">Mobil</a>
       <a href="#keunggulan" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link">Keunggulan</a>
       <a href="#testimoni" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link">Testimoni</a>
-      <a href="#reservasi" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link">Reservasi</a>
+      
+      <!-- Mobile Auth Buttons -->
+      <div id="mobile-auth-guest" class="pt-4 border-t border-slate-100 flex flex-col gap-2 px-3">
+        <button id="mobile-login-btn" class="w-full py-2.5 bg-primary text-white font-bold rounded-xl text-center text-sm hover:bg-blue-700 transition-colors cursor-pointer">Masuk</button>
+        <button id="mobile-register-btn" class="w-full py-2.5 border border-slate-200 text-slate-700 font-semibold rounded-xl text-center text-sm hover:bg-slate-50 transition-colors cursor-pointer">Daftar Akun</button>
+      </div>
+      <div id="mobile-auth-user" class="hidden pt-4 border-t border-slate-100 flex flex-col gap-2 px-3">
+        <div class="flex items-center gap-3 px-3 py-2 mb-2">
+          <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white text-sm font-bold">
+            <span id="mobile-user-initial">U</span>
+          </div>
+          <div class="flex flex-col min-w-0">
+            <span id="mobile-user-name" class="text-sm font-bold text-navy truncate"></span>
+            <span id="mobile-user-email" class="text-xs text-slate-400 truncate"></span>
+          </div>
+        </div>
+        <a href="#reservasi" class="block px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link flex items-center gap-2.5 transition-colors">
+          <i class="ph ph-clock-counter-clockwise text-lg text-slate-400"></i> Riwayat Sewa
+        </a>
+        <button id="mobile-logout-btn" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-semibold text-red-600 hover:bg-red-50 flex items-center gap-2.5 cursor-pointer transition-colors">
+          <i class="ph ph-sign-out text-lg"></i> Keluar
+        </button>
+      </div>
     </div>
   </div>
 </header>
@@ -66,6 +136,27 @@
     color: rgba(255, 255, 255, 0.8);
   }
   header:not(.scrolled) nav a:hover {
+    color: #FFFFFF;
+  }
+
+  /* Profile dropdown button styles */
+  #profile-dropdown-btn {
+    transition: all 0.3s ease;
+  }
+  header:not(.scrolled) #profile-dropdown-btn {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #FFFFFF;
+  }
+  header:not(.scrolled) #profile-dropdown-btn:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+  }
+  header:not(.scrolled) #user-initial-container {
+    background-color: #FACC15;
+    color: #0F172A;
+  }
+  header.scrolled #user-initial-container {
+    background-color: #2563EB;
     color: #FFFFFF;
   }
 
@@ -92,6 +183,28 @@
     const mobileLinks = document.querySelectorAll(".mobile-link");
     const logoContainer = document.getElementById("logo-container");
 
+    const guestCta = document.getElementById("guest-cta");
+    const userCta = document.getElementById("user-cta");
+    const userNameDisplay = document.getElementById("user-name-display");
+    
+    const profileDropdownBtn = document.getElementById("profile-dropdown-btn");
+    const profileDropdownMenu = document.getElementById("profile-dropdown-menu");
+    const dropdownCaret = document.getElementById("dropdown-caret");
+    const userInitial = document.getElementById("user-initial");
+    const dropdownUserEmail = document.getElementById("dropdown-user-email");
+    const dropdownHistoryBtn = document.getElementById("dropdown-history-btn");
+    const dropdownLogoutBtn = document.getElementById("dropdown-logout-btn");
+
+    const mobileAuthGuest = document.getElementById("mobile-auth-guest");
+    const mobileAuthUser = document.getElementById("mobile-auth-user");
+    const mobileUserName = document.getElementById("mobile-user-name");
+    const mobileUserEmail = document.getElementById("mobile-user-email");
+    const mobileUserInitial = document.getElementById("mobile-user-initial");
+    const mobileLogoutBtn = document.getElementById("mobile-logout-btn");
+    
+    const mobileLoginBtn = document.getElementById("mobile-login-btn");
+    const mobileRegisterBtn = document.getElementById("mobile-register-btn");
+
     if (!header || !mobileBtn || !mobileMenu) return;
 
     // Helper to toggle header state on scroll
@@ -101,8 +214,8 @@
         header.classList.remove("top-0", "rounded-none", "bg-transparent", "border-transparent");
         header.classList.add("top-4", "w-[95%]", "max-w-6xl", "rounded-full", "bg-white/50", "backdrop-blur-lg", "shadow-xl", "shadow-blue-900/10", "border-slate-200/50");
 
-        mobileMenu.classList.add("rounded-2xl", "mt-2", "border", "border-slate-200", "shadow-2xl", "overflow-hidden", "bg-white/50", "backdrop-blur-lg");
-        mobileMenu.classList.remove("border-t", "bg-white");
+        mobileMenu.classList.add("rounded-2xl", "mt-2", "border", "border-slate-200", "shadow-2xl", "overflow-hidden", "bg-white");
+        mobileMenu.classList.remove("border-t", "bg-white/50", "backdrop-blur-lg");
       } else {
         header.classList.remove("scrolled");
         header.classList.add("top-0", "rounded-none", "bg-transparent", "border-transparent");
@@ -144,5 +257,113 @@
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
     }
+
+    // Dynamic Auth State Update
+    const updateAuthState = () => {
+      const currentUser = JSON.parse(localStorage.getItem("kgyk_current_user") || "null");
+
+      if (currentUser) {
+        guestCta?.classList.add("hidden");
+        guestCta?.classList.remove("lg:inline-flex");
+        
+        userCta?.classList.add("hidden", "lg:inline-flex");
+        userCta?.classList.remove("flex");
+        if (userNameDisplay) userNameDisplay.textContent = currentUser.fullName;
+        
+        // Initial letter
+        const initial = currentUser.fullName ? currentUser.fullName.charAt(0).toUpperCase() : "U";
+        if (userInitial) userInitial.textContent = initial;
+        if (dropdownUserEmail) dropdownUserEmail.textContent = currentUser.email;
+
+        // Mobile Menu
+        mobileAuthGuest?.classList.add("hidden");
+        mobileAuthUser?.classList.remove("hidden");
+        mobileAuthUser?.classList.add("flex");
+        if (mobileUserName) mobileUserName.textContent = currentUser.fullName;
+        if (mobileUserEmail) mobileUserEmail.textContent = currentUser.email;
+        if (mobileUserInitial) mobileUserInitial.textContent = initial;
+      } else {
+        guestCta?.classList.remove("hidden");
+        guestCta?.classList.add("lg:inline-flex");
+        
+        userCta?.classList.add("hidden");
+        userCta?.classList.remove("lg:inline-flex", "flex");
+        profileDropdownMenu?.classList.add("hidden");
+        if (dropdownCaret) dropdownCaret.classList.remove("rotate-180");
+
+        // Mobile Menu
+        mobileAuthGuest?.classList.remove("hidden");
+        mobileAuthUser?.classList.add("hidden");
+        mobileAuthUser?.classList.remove("flex");
+      }
+    };
+
+    window.addEventListener("auth-changed", updateAuthState);
+    updateAuthState(); // Initial run
+
+    // Click Handlers
+    guestCta?.addEventListener("click", () => {
+      if ((window as any).openLoginModal) (window as any).openLoginModal();
+    });
+
+    mobileLoginBtn?.addEventListener("click", () => {
+      mobileMenu.classList.add("hidden");
+      if ((window as any).openLoginModal) (window as any).openLoginModal();
+    });
+
+    mobileRegisterBtn?.addEventListener("click", () => {
+      mobileMenu.classList.add("hidden");
+      if ((window as any).openRegisterModal) (window as any).openRegisterModal();
+    });
+
+    // Dropdown toggle logic
+    if (profileDropdownBtn && profileDropdownMenu) {
+      profileDropdownBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        profileDropdownMenu.classList.toggle("hidden");
+        if (dropdownCaret) {
+          dropdownCaret.classList.toggle("rotate-180");
+        }
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener("click", (e) => {
+        if (!profileDropdownBtn.contains(e.target as Node) && !profileDropdownMenu.contains(e.target as Node)) {
+          profileDropdownMenu.classList.add("hidden");
+          if (dropdownCaret) {
+            dropdownCaret.classList.remove("rotate-180");
+          }
+        }
+      });
+
+      // Close when clicking a link inside
+      dropdownHistoryBtn?.addEventListener("click", () => {
+        profileDropdownMenu.classList.add("hidden");
+        if (dropdownCaret) {
+          dropdownCaret.classList.remove("rotate-180");
+        }
+      });
+    }
+
+    const handleLogout = () => {
+      localStorage.removeItem("kgyk_current_user");
+      window.dispatchEvent(new CustomEvent("auth-changed"));
+      alert("Anda telah berhasil keluar.");
+      // Reset hash if it was reservasi
+      if (window.location.hash === "#reservasi") {
+        window.location.hash = "";
+      }
+    };
+
+    dropdownLogoutBtn?.addEventListener("click", () => {
+      profileDropdownMenu?.classList.add("hidden");
+      if (dropdownCaret) dropdownCaret.classList.remove("rotate-180");
+      handleLogout();
+    });
+
+    mobileLogoutBtn?.addEventListener("click", () => {
+      mobileMenu.classList.add("hidden");
+      handleLogout();
+    });
   });
 </script>

@@ -2,13 +2,13 @@
 import { cars } from '../../data/cars';
 ---
 <!-- Reservasi & Kontak Section -->
-<section id="reservasi" class="py-20 bg-lightbg relative">
+<section id="reservasi" class="py-20 bg-lightbg relative border-t border-slate-100">
   <div class="container mx-auto px-4 sm:px-6 lg:px-8">
     <div class="bg-white rounded-3xl shadow-xl overflow-hidden">
       <div class="flex flex-col lg:flex-row">
-        <!-- Info Kontak -->
-        <div class="lg:w-2/5 bg-navy text-white p-10 lg:p-12 relative overflow-hidden">
-          <!-- Decorative bg -->
+        
+        <!-- Info Kontak Panel -->
+        <div class="lg:w-2/5 bg-navy text-white p-10 lg:p-12 relative overflow-hidden flex flex-col justify-between">
           <div class="absolute top-0 right-0 w-64 h-64 bg-primary rounded-full filter blur-3xl opacity-20 -translate-y-1/2 translate-x-1/3"></div>
 
           <div class="relative z-10">
@@ -44,120 +44,520 @@ import { cars } from '../../data/cars';
                 </div>
               </div>
             </div>
+          </div>
 
-            <div class="mt-12 flex gap-4">
-              <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary rounded-full flex items-center justify-center text-white transition-colors">
-                <i class="ph-fill ph-instagram-logo"></i>
-              </a>
-              <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary rounded-full flex items-center justify-center text-white transition-colors">
-                <i class="ph-fill ph-facebook-logo"></i>
-              </a>
-              <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary rounded-full flex items-center justify-center text-white transition-colors">
-                <i class="ph-fill ph-twitter-logo"></i>
-              </a>
-            </div>
+          <div class="mt-12 flex gap-4 relative z-10">
+            <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary rounded-full flex items-center justify-center text-white transition-colors duration-300">
+              <i class="ph-fill ph-instagram-logo"></i>
+            </a>
+            <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary rounded-full flex items-center justify-center text-white transition-colors duration-300">
+              <i class="ph-fill ph-facebook-logo"></i>
+            </a>
+            <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary rounded-full flex items-center justify-center text-white transition-colors duration-300">
+              <i class="ph-fill ph-twitter-logo"></i>
+            </a>
           </div>
         </div>
 
-        <!-- Form Section -->
-        <div class="lg:w-3/5 p-10 lg:p-12">
-          <h3 class="text-2xl font-bold text-navy mb-6">Form Reservasi Online</h3>
-          <form id="contactForm" class="space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Lengkap</label>
-                <input
-                  type="text"
-                  id="formName"
-                  required
-                  class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-slate-50 focus:bg-white text-slate-800"
-                  placeholder="Masukkan nama Anda"
-                />
-              </div>
-              <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-2">Nomor WhatsApp</label>
-                <input
-                  type="tel"
-                  id="formWa"
-                  required
-                  class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-slate-50 focus:bg-white text-slate-800"
-                  placeholder="0812xxxxxx"
-                />
-              </div>
+        <!-- Dynamic Form Panel -->
+        <div class="lg:w-3/5 p-10 lg:p-12 relative flex items-center">
+          
+          <!-- State 1: Guest (Logged Out) -->
+          <div id="booking-logged-out" class="w-full text-center py-10 flex flex-col items-center">
+            <div class="w-20 h-20 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mb-6 border border-slate-200">
+              <i class="ph ph-lock text-4xl"></i>
             </div>
+            <h3 class="text-2xl font-bold text-navy mb-2">Pemesanan Online Terkunci</h3>
+            <p class="text-slate-500 text-sm max-w-sm mb-8">Untuk menjamin kenyamanan bertransaksi, silakan masuk ke akun Anda atau mendaftar terlebih dahulu.</p>
+            <div class="flex gap-4">
+              <button id="btn-form-login" class="px-6 py-3 bg-primary hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition-all shadow-md cursor-pointer">
+                Masuk ke Akun
+              </button>
+              <button id="btn-form-register" class="px-6 py-3 border border-slate-200 text-slate-700 hover:bg-slate-50 font-bold rounded-xl text-sm transition-all cursor-pointer">
+                Daftar Baru
+              </button>
+            </div>
+          </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-2">Pilihan Mobil (Opsional)</label>
-                <select id="formCar" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-slate-50 focus:bg-white text-slate-700">
-                  <option value="">Pilih Mobil / Belum Tahu</option>
-                  {cars.map((car) => (
-                    <option value={car.name}>{car.name}</option>
-                  ))}
-                </select>
-              </div>
-              <div class="grid grid-cols-2 gap-2">
+          <!-- State 2: Member (Logged In) -->
+          <div id="booking-logged-in" class="hidden w-full">
+            <h3 class="text-2xl font-bold text-navy mb-6">Form Pemesanan Online</h3>
+            <form id="contactForm" class="space-y-6">
+              
+              <!-- User Info Row (read-only) -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label class="block text-sm font-semibold text-slate-700 mb-2">Tanggal Sewa</label>
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Pelanggan</label>
                   <input
-                    type="date"
-                    id="formDate"
-                    required
-                    class="w-full px-3 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-slate-50 focus:bg-white text-slate-700"
+                    type="text"
+                    id="formName"
+                    disabled
+                    class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-100 text-slate-500 text-sm font-medium cursor-not-allowed"
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-semibold text-slate-700 mb-2">Durasi (Hari)</label>
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">Pilihan Mobil</label>
+                  <select id="formCar" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-slate-50 focus:bg-white text-slate-700 text-sm">
+                    <option value="">Pilih Armada Mobil</option>
+                    {cars.map((car) => (
+                      <option value={car.name}>{car.name} ({car.type})</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <!-- Date Picker Row -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">Tanggal Mulai Sewa</label>
+                  <input
+                    type="date"
+                    id="formDateStart"
+                    required
+                    class="w-full px-3 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-slate-50 focus:bg-white text-slate-700 text-sm"
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">Tanggal Selesai Sewa</label>
+                  <input
+                    type="date"
+                    id="formDateEnd"
+                    required
+                    class="w-full px-3 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-slate-50 focus:bg-white text-slate-700 text-sm"
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">Durasi Sewa (Hari)</label>
                   <input
                     type="number"
                     id="formDuration"
-                    min="1"
-                    required
-                    class="w-full px-3 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-slate-50 focus:bg-white text-slate-800"
-                    placeholder="Misal: 3"
+                    disabled
+                    class="w-full px-3 py-3 rounded-xl border border-slate-200 bg-slate-100 text-slate-500 font-bold text-sm cursor-not-allowed"
+                    placeholder="Otomatis"
                   />
                 </div>
               </div>
-            </div>
 
-            <div>
-              <label class="block text-sm font-semibold text-slate-700 mb-2">Pesan Tambahan</label>
-              <textarea
-                id="formMessage"
-                rows="4"
-                class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-slate-50 focus:bg-white resize-none text-slate-800"
-                placeholder="Tuliskan tujuan perjalanan, request khusus, dsb."
-              ></textarea>
-            </div>
+              <!-- Service Type and Locations -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Layanan</label>
+                  <select id="formService" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-slate-50 focus:bg-white text-slate-700 text-sm">
+                    <option value="Lepas kunci">Lepas Kunci</option>
+                    <option value="Dengan supir">Dengan Supir</option>
+                    <option value="Antar kendaraan ke lokasi">Antar Kendaraan</option>
+                    <option value="Ambil di kantor rental">Ambil di Kantor</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">Lokasi Pengambilan</label>
+                  <input
+                    type="text"
+                    id="formPickup"
+                    required
+                    class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-slate-50 focus:bg-white text-slate-800 text-sm"
+                    placeholder="Bandara / Rumah / Kantor"
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">Lokasi Pengembalian</label>
+                  <input
+                    type="text"
+                    id="formDropoff"
+                    required
+                    class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-slate-50 focus:bg-white text-slate-800 text-sm"
+                    placeholder="Bandara / Rumah / Kantor"
+                  />
+                </div>
+              </div>
 
-            <button
-              type="submit"
-              class="w-full flex justify-center items-center gap-2 py-4 px-8 border border-transparent rounded-xl shadow-sm text-base font-bold text-white bg-primary hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all transform hover:-translate-y-1 hover:shadow-lg"
-            >
-              <i class="ph ph-check-circle text-2xl"></i>
-              Konfirmasi Reservasi
-            </button>
-          </form>
+              <!-- Notes & File Upload -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">Pesan Tambahan</label>
+                  <textarea
+                    id="formMessage"
+                    rows="3"
+                    class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-slate-50 focus:bg-white resize-none text-slate-800 text-sm"
+                    placeholder="Catatan tambahan untuk admin..."
+                  ></textarea>
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">Upload Identitas (KTP / SIM A)</label>
+                  <div class="border-2 border-dashed border-slate-200 rounded-xl p-4 text-center cursor-pointer hover:border-primary hover:bg-slate-50/50 transition-colors">
+                    <i class="ph ph-upload text-2xl text-slate-400 mb-1"></i>
+                    <p class="text-xs text-slate-500 font-semibold">Klik atau tarik file ke area ini</p>
+                    <p class="text-[10px] text-slate-400">PDF, PNG, JPG (Maks. 5MB)</p>
+                    <input type="file" id="formDoc" class="hidden" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Live Cost Estimate -->
+              <div id="price-estimate-section" class="hidden bg-blue-50 border border-blue-100 rounded-2xl p-5 flex justify-between items-center animate-fade-in">
+                <div>
+                  <span class="text-xs font-semibold text-primary uppercase tracking-wider">Estimasi Biaya Sewa</span>
+                  <p class="text-xs text-slate-500">Mulai dari <span id="estimate-price-day" class="font-bold text-slate-700"></span> /hari</p>
+                </div>
+                <div class="text-right">
+                  <span class="text-xs text-slate-500">Total Biaya:</span>
+                  <p id="estimate-price-total" class="text-2xl font-extrabold text-navy"></p>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                class="w-full flex justify-center items-center gap-2 py-4 px-8 border border-transparent rounded-xl shadow-sm text-base font-bold text-white bg-primary hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all transform hover:-translate-y-1 hover:shadow-lg cursor-pointer"
+              >
+                <i class="ph ph-check-circle text-2xl"></i>
+                Konfirmasi Booking Mobil
+              </button>
+            </form>
+          </div>
+
         </div>
       </div>
     </div>
+
+    <!-- User Dashboard / Booking History -->
+    <div id="booking-history-section" class="hidden mt-16 bg-white rounded-3xl p-8 lg:p-10 shadow-xl border border-slate-100 animate-fade-in">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+        <div>
+          <h3 class="text-2xl font-bold text-navy">Riwayat Pemesanan</h3>
+          <p class="text-slate-500 text-sm">Kelola status dan jadwal penyewaan kendaraan Anda.</p>
+        </div>
+        
+        <!-- Admin Simulation Switch -->
+        <div class="flex items-center gap-3 bg-slate-100 border border-slate-200/50 rounded-2xl px-4 py-2 text-slate-700">
+          <span class="text-xs font-bold flex items-center gap-1.5 text-navy">
+            <i class="ph ph-shield-check text-base text-primary"></i>
+            Simulasi Mode Admin
+          </span>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="adminModeToggle" class="sr-only peer" />
+            <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Bookings Table -->
+      <div class="overflow-x-auto rounded-2xl border border-slate-100">
+        <table class="min-w-full divide-y divide-slate-100 bg-white">
+          <thead class="bg-slate-50">
+            <tr>
+              <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">ID</th>
+              <th id="th-user" scope="col" class="hidden px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Pelanggan</th>
+              <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Mobil</th>
+              <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Jadwal Sewa</th>
+              <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Biaya</th>
+              <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
+              <th id="th-actions" scope="col" class="hidden px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Verifikasi</th>
+            </tr>
+          </thead>
+          <tbody id="booking-list" class="divide-y divide-slate-100">
+            <!-- Dynamic data rows -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
 </section>
 
 <script>
+  import { cars } from '../../data/cars';
+
   document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("contactForm");
+    const loggedOutState = document.getElementById("booking-logged-out");
+    const loggedInState = document.getElementById("booking-logged-in");
+    
+    const form = document.getElementById("contactForm") as HTMLFormElement | null;
+    const formName = document.getElementById("formName") as HTMLInputElement | null;
+    const formCar = document.getElementById("formCar") as HTMLSelectElement | null;
+    const formDateStart = document.getElementById("formDateStart") as HTMLInputElement | null;
+    const formDateEnd = document.getElementById("formDateEnd") as HTMLInputElement | null;
+    const formDuration = document.getElementById("formDuration") as HTMLInputElement | null;
+    const formService = document.getElementById("formService") as HTMLSelectElement | null;
+    const formPickup = document.getElementById("formPickup") as HTMLInputElement | null;
+    const formDropoff = document.getElementById("formDropoff") as HTMLInputElement | null;
+    const formMessage = document.getElementById("formMessage") as HTMLTextAreaElement | null;
+    
+    // Estimates
+    const pricePerDayContainer = document.getElementById("estimate-price-day");
+    const totalPriceContainer = document.getElementById("estimate-price-total");
+    const estimateSection = document.getElementById("price-estimate-section");
 
-    if (form) {
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
+    // History and Admin Panel
+    const bookingHistorySection = document.getElementById("booking-history-section");
+    const bookingListContainer = document.getElementById("booking-list");
+    const adminToggle = document.getElementById("adminModeToggle") as HTMLInputElement | null;
+    const thUser = document.getElementById("th-user");
+    const thActions = document.getElementById("th-actions");
+    
+    const btnFormLogin = document.getElementById("btn-form-login");
+    const btnFormRegister = document.getElementById("btn-form-register");
 
-        // Dispatch the custom event to notify SuccessModal
-        window.dispatchEvent(new CustomEvent("booking-success"));
+    if (!loggedOutState || !loggedInState) return;
 
-        // Reset the form
-        (form as HTMLFormElement).reset();
+    btnFormLogin?.addEventListener("click", () => {
+      if ((window as any).openLoginModal) (window as any).openLoginModal();
+    });
+    
+    btnFormRegister?.addEventListener("click", () => {
+      if ((window as any).openRegisterModal) (window as any).openRegisterModal();
+    });
+
+    const formatRupiah = (number: number) => {
+      return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(number);
+    };
+
+    // Calculate dates duration and estimate total cost
+    const updateEstimates = () => {
+      if (!formCar || !formDateStart || !formDateEnd || !formDuration || !totalPriceContainer || !pricePerDayContainer || !estimateSection) return;
+
+      const selectedCarName = formCar.value;
+      const car = cars.find(c => c.name === selectedCarName);
+
+      if (!car || !formDateStart.value || !formDateEnd.value) {
+        estimateSection.classList.add("hidden");
+        formDuration.value = "";
+        return;
+      }
+
+      const start = new Date(formDateStart.value);
+      const end = new Date(formDateEnd.value);
+
+      if (end < start) {
+        estimateSection.classList.add("hidden");
+        formDuration.value = "";
+        return;
+      }
+
+      // Calculate diff in days
+      const diffTime = Math.abs(end.getTime() - start.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // inclusive of start day
+
+      formDuration.value = diffDays.toString();
+      pricePerDayContainer.textContent = formatRupiah(car.price);
+      totalPriceContainer.textContent = formatRupiah(car.price * diffDays);
+      estimateSection.classList.remove("hidden");
+    };
+
+    formCar?.addEventListener("change", updateEstimates);
+    formDateStart?.addEventListener("change", updateEstimates);
+    formDateEnd?.addEventListener("change", updateEstimates);
+
+    // Initial check and render bookings
+    const renderBookings = () => {
+      if (!bookingListContainer || !bookingHistorySection) return;
+
+      const currentUser = JSON.parse(localStorage.getItem("kgyk_current_user") || "null");
+      if (!currentUser) {
+        bookingHistorySection.classList.add("hidden");
+        return;
+      }
+
+      bookingHistorySection.classList.remove("hidden");
+      const isAdmin = adminToggle ? adminToggle.checked : false;
+      const bookings = JSON.parse(localStorage.getItem("kgyk_bookings") || "[]");
+      
+      // Filter list
+      const displayedBookings = isAdmin 
+        ? bookings 
+        : bookings.filter((b: any) => b.userEmail === currentUser.email);
+
+      // Hide or show columns
+      if (isAdmin) {
+        thUser?.classList.remove("hidden");
+        thActions?.classList.remove("hidden");
+      } else {
+        thUser?.classList.add("hidden");
+        thActions?.classList.add("hidden");
+      }
+
+      bookingListContainer.innerHTML = "";
+
+      if (displayedBookings.length === 0) {
+        bookingListContainer.innerHTML = `
+          <tr>
+            <td colspan="${isAdmin ? 7 : 5}" class="px-6 py-12 text-center text-slate-400 text-sm">
+              <i class="ph ph-calendar text-4xl block mb-2 text-slate-300"></i>
+              Belum ada data pemesanan.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      displayedBookings.forEach((b: any) => {
+        let statusClass = "bg-amber-100 text-amber-700 border-amber-200";
+        if (b.status === "Disetujui") statusClass = "bg-green-100 text-green-700 border-green-200";
+        if (b.status === "Ditolak") statusClass = "bg-red-100 text-red-700 border-red-200";
+
+        const formattedStart = new Date(b.startDate).toLocaleDateString("id-ID", { day: 'numeric', month: 'short', year: 'numeric' });
+        const formattedEnd = new Date(b.endDate).toLocaleDateString("id-ID", { day: 'numeric', month: 'short', year: 'numeric' });
+
+        const adminControls = isAdmin ? `
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+            <div class="flex items-center gap-2">
+              ${b.status === "Menunggu Verifikasi" ? `
+                <button data-approve-id="${b.id}" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow-sm hover:shadow-md cursor-pointer">Setujui</button>
+                <button data-reject-id="${b.id}" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow-sm hover:shadow-md cursor-pointer">Tolak</button>
+              ` : `<span class="text-xs text-slate-400 font-semibold">${b.status}</span>`}
+            </div>
+          </td>
+        ` : "";
+
+        const row = `
+          <tr class="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-navy">#${b.id.toString().slice(-6)}</td>
+            ${isAdmin ? `<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-medium">${b.userName}</td>` : ""}
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800 font-bold">${b.carName}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+              <span class="block font-semibold text-slate-700">${formattedStart} - ${formattedEnd}</span>
+              <span class="text-xs text-slate-400">${b.duration} Hari (${b.serviceType})</span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-navy">${formatRupiah(b.totalPrice)}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="px-2.5 py-1 inline-flex text-xs font-bold leading-5 rounded-full border ${statusClass}">
+                ${b.status}
+              </span>
+            </td>
+            ${adminControls}
+          </tr>
+        `;
+        bookingListContainer.insertAdjacentHTML("beforeend", row);
       });
-    }
+
+      // Bind actions
+      if (isAdmin) {
+        bookingListContainer.querySelectorAll("[data-approve-id]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = parseInt(btn.getAttribute("data-approve-id") || "0");
+            updateBookingStatus(id, "Disetujui");
+          });
+        });
+        
+        bookingListContainer.querySelectorAll("[data-reject-id]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = parseInt(btn.getAttribute("data-reject-id") || "0");
+            updateBookingStatus(id, "Ditolak");
+          });
+        });
+      }
+    };
+
+    const updateBookingStatus = (id: number, status: "Disetujui" | "Ditolak") => {
+      const bookings = JSON.parse(localStorage.getItem("kgyk_bookings") || "[]");
+      const index = bookings.findIndex((b: any) => b.id === id);
+      if (index !== -1) {
+        bookings[index].status = status;
+        localStorage.setItem("kgyk_bookings", JSON.stringify(bookings));
+        renderBookings();
+        alert(`Pesanan #${id.toString().slice(-6)} berhasil ${status.toLowerCase()}!`);
+      }
+    };
+
+    adminToggle?.addEventListener("change", renderBookings);
+
+    // Form submit validation & conflict checking
+    form?.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const currentUser = JSON.parse(localStorage.getItem("kgyk_current_user") || "null");
+      if (!currentUser) {
+        alert("Silakan login terlebih dahulu untuk melakukan pemesanan.");
+        return;
+      }
+
+      if (!formCar || !formDateStart || !formDateEnd || !formService || !formPickup || !formDropoff) return;
+
+      const selectedCarName = formCar.value;
+      const car = cars.find(c => c.name === selectedCarName);
+      if (!car) {
+        alert("Silakan pilih kendaraan.");
+        return;
+      }
+
+      const startDateStr = formDateStart.value;
+      const endDateStr = formDateEnd.value;
+      const start = new Date(startDateStr);
+      const end = new Date(endDateStr);
+
+      if (end < start) {
+        alert("Tanggal selesai tidak boleh sebelum tanggal mulai.");
+        return;
+      }
+
+      const diffTime = Math.abs(end.getTime() - start.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+      // Conflict validation check
+      const bookings = JSON.parse(localStorage.getItem("kgyk_bookings") || "[]");
+      const isConflicted = bookings.some((b: any) => {
+        if (b.carName === selectedCarName && b.status !== "Ditolak") {
+          const existingStart = new Date(b.startDate);
+          const existingEnd = new Date(b.endDate);
+          // Overlap detection
+          return (start <= existingEnd && end >= existingStart);
+        }
+        return false;
+      });
+
+      if (isConflicted) {
+        alert(`Maaf, mobil ${selectedCarName} tidak tersedia pada tanggal tersebut karena sudah di-booking oleh penyewa lain. Silakan pilih tanggal atau jenis kendaraan lain.`);
+        return;
+      }
+
+      // Save new booking
+      const newBooking = {
+        id: Date.now(),
+        userEmail: currentUser.email,
+        userName: currentUser.fullName,
+        carId: car.id,
+        carName: car.name,
+        startDate: startDateStr,
+        endDate: endDateStr,
+        duration: diffDays,
+        serviceType: formService.value,
+        pickupLocation: formPickup.value.trim(),
+        dropoffLocation: formDropoff.value.trim(),
+        notes: formMessage ? formMessage.value.trim() : "",
+        totalPrice: car.price * diffDays,
+        status: "Menunggu Verifikasi"
+      };
+
+      bookings.push(newBooking);
+      localStorage.setItem("kgyk_bookings", JSON.stringify(bookings));
+
+      // Trigger success event
+      window.dispatchEvent(new CustomEvent("booking-success"));
+
+      // Reset
+      form.reset();
+      updateEstimates();
+      renderBookings();
+    });
+
+    const updateUIState = () => {
+      const currentUser = JSON.parse(localStorage.getItem("kgyk_current_user") || "null");
+      if (currentUser) {
+        loggedOutState.classList.add("hidden");
+        loggedInState.classList.remove("hidden");
+        if (formName) {
+          formName.value = currentUser.fullName;
+        }
+        renderBookings();
+      } else {
+        loggedOutState.classList.remove("hidden");
+        loggedInState.classList.add("hidden");
+        if (bookingHistorySection) {
+          bookingHistorySection.classList.add("hidden");
+        }
+      }
+    };
+
+    window.addEventListener("auth-changed", updateUIState);
+    updateUIState(); // Run initial state check
   });
 </script>
