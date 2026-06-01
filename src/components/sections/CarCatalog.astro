@@ -1,0 +1,204 @@
+---
+---
+<!-- Car Catalog Section -->
+<section id="mobil" class="py-20 bg-white">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+      <div class="max-w-xl" data-aos="fade-right">
+        <h4 class="text-primary font-bold tracking-wider uppercase text-sm mb-2">Katalog Armada</h4>
+        <h2 class="text-3xl md:text-4xl font-bold text-navy mb-4">Pilih Mobil Sesuai Kebutuhan Anda</h2>
+      </div>
+
+      <!-- Search Box -->
+      <div class="relative max-w-sm w-full" data-aos="fade-left">
+        <input type="text" id="searchInput" placeholder="Cari nama mobil..." class="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" />
+        <i class="ph ph-magnifying-glass absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 text-xl"></i>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="flex flex-wrap items-center gap-3 mb-10" id="filterContainer" data-aos="fade-up">
+      <button class="filter-btn active px-6 py-2 rounded-full border border-slate-200 text-sm font-semibold transition-all hover:bg-primary hover:text-white hover:border-primary" data-filter="all">Semua</button>
+      <button class="filter-btn px-6 py-2 rounded-full border border-slate-200 text-slate-600 text-sm font-semibold transition-all hover:bg-primary hover:text-white hover:border-primary" data-filter="city car">City Car</button>
+      <button class="filter-btn px-6 py-2 rounded-full border border-slate-200 text-slate-600 text-sm font-semibold transition-all hover:bg-primary hover:text-white hover:border-primary" data-filter="mpv">MPV</button>
+      <button class="filter-btn px-6 py-2 rounded-full border border-slate-200 text-slate-600 text-sm font-semibold transition-all hover:bg-primary hover:text-white hover:border-primary" data-filter="suv">SUV</button>
+      <button class="filter-btn px-6 py-2 rounded-full border border-slate-200 text-slate-600 text-sm font-semibold transition-all hover:bg-primary hover:text-white hover:border-primary" data-filter="van">Van</button>
+    </div>
+
+    <!-- Car Grid -->
+    <div id="carGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Cars will be populated here via JavaScript -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="noCarFound" class="hidden text-center py-20">
+      <i class="ph ph-car text-6xl text-slate-300 mb-4"></i>
+      <h3 class="text-xl font-bold text-navy mb-2">Mobil tidak ditemukan</h3>
+      <p class="text-slate-500">Silakan coba pencarian dengan kata kunci lain.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { cars } from '../../data/cars';
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const carGrid = document.getElementById("carGrid");
+    const noCarFound = document.getElementById("noCarFound");
+    const searchInput = document.getElementById("searchInput") as HTMLInputElement | null;
+    const filterBtns = document.querySelectorAll(".filter-btn");
+
+    if (!carGrid || !noCarFound) return;
+
+    const formatRupiah = (number: number) => {
+      return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(number);
+    };
+
+    const renderCars = (carArray: typeof cars) => {
+      carGrid.innerHTML = "";
+      if (carArray.length === 0) {
+        noCarFound.classList.remove("hidden");
+      } else {
+        noCarFound.classList.add("hidden");
+        carArray.forEach((car, index) => {
+          const statusBadge = car.status
+            ? `<span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">Tersedia</span>`
+            : `<span class="px-3 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full">Tidak Tersedia</span>`;
+
+          const btnClass = car.status ? `bg-primary hover:bg-blue-700 text-white cursor-pointer` : `bg-slate-300 text-slate-500 cursor-not-allowed`;
+          const btnAction = car.status ? `data-book-car="${car.name}"` : `disabled`;
+
+          const html = `
+            <div class="bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group flex flex-col" data-aos="fade-up" data-aos-delay="${(index % 3) * 100}">
+                <div class="relative h-56 overflow-hidden cursor-pointer" data-detail-id="${car.id}">
+                    <img src="${car.img}" alt="${car.name}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-navy/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
+                        <span class="bg-white text-primary px-4 py-2 rounded-full font-bold text-sm shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">Lihat Detail</span>
+                    </div>
+                    <div class="absolute top-4 right-4 z-20">
+                        ${statusBadge}
+                    </div>
+                    <div class="absolute bottom-4 left-4 z-20">
+                        <span class="px-3 py-1 bg-white/90 backdrop-blur-sm text-navy text-xs font-bold rounded-full shadow-sm">${car.type}</span>
+                    </div>
+                </div>
+                <div class="p-6 flex-grow flex flex-col">
+                    <h3 class="text-xl font-bold text-navy mb-4 cursor-pointer hover:text-primary transition-colors" data-detail-id="${car.id}">${car.name}</h3>
+                    <div class="grid grid-cols-2 gap-y-3 mb-6">
+                        <div class="flex items-center gap-2 text-sm text-slate-600">
+                            <i class="ph text-primary ph-users"></i> ${car.capacity}
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-slate-600">
+                            <i class="ph text-primary ph-gas-pump"></i> Bensin
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-slate-600">
+                            <i class="ph text-primary ph-steering-wheel"></i> ${car.trans}
+                        </div>
+                    </div>
+                    <div class="pt-4 mt-auto border-t border-slate-100 flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-slate-500">Mulai dari</p>
+                            <p class="text-lg font-bold text-navy">${formatRupiah(car.price)} <span class="text-sm font-normal text-slate-500">/hari</span></p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button data-detail-id="${car.id}" class="px-3 py-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-primary text-sm font-semibold transition-colors" title="Lihat Detail">
+                                <i class="ph ph-info text-lg"></i>
+                            </button>
+                            <button ${btnAction} class="${btnClass} px-4 py-2 rounded-xl text-sm font-semibold transition-colors">
+                                Booking
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          `;
+          carGrid.insertAdjacentHTML("beforeend", html);
+        });
+
+        // Re-bind events to dynamically created elements
+        // 1. Detail triggering
+        carGrid.querySelectorAll("[data-detail-id]").forEach(el => {
+          el.addEventListener("click", () => {
+            const id = parseInt(el.getAttribute("data-detail-id") || "0");
+            if (id && (window as any).openCarDetail) {
+              (window as any).openCarDetail(id);
+            }
+          });
+        });
+
+        // 2. Booking button triggering
+        carGrid.querySelectorAll("[data-book-car]").forEach(el => {
+          el.addEventListener("click", () => {
+            const carName = el.getAttribute("data-book-car");
+            if (carName && (window as any).bookCar) {
+              (window as any).bookCar(carName);
+            }
+          });
+        });
+      }
+    };
+
+    // Initial render
+    renderCars(cars);
+
+    // Filter logic
+    filterBtns.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        const target = e.currentTarget as HTMLButtonElement;
+
+        // UI Update
+        filterBtns.forEach((b) => b.classList.remove("active", "bg-primary", "text-white"));
+        filterBtns.forEach((b) => b.classList.add("text-slate-600"));
+        target.classList.remove("text-slate-600");
+        target.classList.add("active", "bg-primary", "text-white");
+
+        // Filtering
+        const filterValue = target.getAttribute("data-filter");
+        const searchVal = searchInput ? searchInput.value.toLowerCase() : "";
+
+        let filteredCars = cars;
+        if (filterValue !== "all") {
+          filteredCars = filteredCars.filter((car) => car.category === filterValue);
+        }
+        if (searchVal) {
+          filteredCars = filteredCars.filter((car) => car.name.toLowerCase().includes(searchVal));
+        }
+        renderCars(filteredCars);
+      });
+    });
+
+    // Search logic
+    if (searchInput) {
+      searchInput.addEventListener("input", (e) => {
+        const searchVal = (e.target as HTMLInputElement).value.toLowerCase();
+        const activeFilterBtn = document.querySelector(".filter-btn.active");
+        const activeFilter = activeFilterBtn ? activeFilterBtn.getAttribute("data-filter") : "all";
+
+        let filteredCars = cars;
+        if (activeFilter !== "all") {
+          filteredCars = filteredCars.filter((car) => car.category === activeFilter);
+        }
+        filteredCars = filteredCars.filter((car) => car.name.toLowerCase().includes(searchVal));
+        renderCars(filteredCars);
+      });
+    }
+
+    // Global bookCar mapping
+    (window as any).bookCar = (carName: string) => {
+      const formSection = document.getElementById("reservasi");
+      if (formSection) {
+        formSection.scrollIntoView({ behavior: "smooth" });
+      }
+      const carSelect = document.getElementById("formCar") as HTMLSelectElement | null;
+      if (carSelect) {
+        for (let i = 0; i < carSelect.options.length; i++) {
+          if (carSelect.options[i].text.includes(carName) || carSelect.options[i].value === carName) {
+            carSelect.selectedIndex = i;
+            carSelect.dispatchEvent(new Event("change"));
+            break;
+          }
+        }
+      }
+    };
+  });
+</script>

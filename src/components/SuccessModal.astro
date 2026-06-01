@@ -1,0 +1,52 @@
+---
+---
+<!-- Modal Sukses Reservasi -->
+<div id="successModal" class="fixed inset-0 z-[100] hidden items-center justify-center">
+  <!-- Backdrop -->
+  <div class="absolute inset-0 bg-navy/60 backdrop-blur-sm transition-opacity" id="modalBackdrop"></div>
+
+  <!-- Modal Content -->
+  <div class="bg-white rounded-3xl p-8 max-w-md w-full mx-4 relative z-10 transform scale-95 opacity-0 transition-all duration-300 shadow-2xl" id="modalContent">
+    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+      <i class="ph-fill ph-check-circle text-5xl text-green-500"></i>
+    </div>
+    <h3 class="text-2xl font-bold text-navy text-center mb-2">Reservasi Berhasil!</h3>
+    <p class="text-slate-600 text-center mb-8">Terima kasih telah melakukan reservasi. Tim kami akan segera menghubungi Anda untuk memproses pesanan ini.</p>
+    <button id="closeModalBtn" class="w-full py-3 px-6 bg-primary hover:bg-blue-700 text-white font-bold rounded-xl transition-colors">Kembali ke Beranda</button>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const successModal = document.getElementById("successModal");
+    const modalContent = document.getElementById("modalContent");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const modalBackdrop = document.getElementById("modalBackdrop");
+
+    if (!successModal || !modalContent || !closeModalBtn || !modalBackdrop) return;
+
+    const closeModal = () => {
+      modalContent.classList.remove("scale-100", "opacity-100");
+      modalContent.classList.add("scale-95", "opacity-0");
+
+      setTimeout(() => {
+        successModal.classList.add("hidden");
+        successModal.classList.remove("flex");
+      }, 300);
+    };
+
+    closeModalBtn.addEventListener("click", closeModal);
+    modalBackdrop.addEventListener("click", closeModal);
+
+    // Listen to custom booking-success event
+    window.addEventListener("booking-success", () => {
+      successModal.classList.remove("hidden");
+      successModal.classList.add("flex");
+
+      setTimeout(() => {
+        modalContent.classList.remove("scale-95", "opacity-0");
+        modalContent.classList.add("scale-100", "opacity-100");
+      }, 10);
+    });
+  });
+</script>

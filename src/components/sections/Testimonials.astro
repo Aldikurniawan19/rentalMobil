@@ -1,0 +1,126 @@
+---
+import SectionHeader from '../ui/SectionHeader.astro';
+
+const testimonials = [
+  {
+    stars: 5,
+    text: "Sistem pemesanan online-nya sangat memudahkan. Saya bisa pantau status pesanan saya tanpa harus bolak-balik chat admin. Verifikasinya cepat dan mobil sesuai deskripsi.",
+    name: "Andi Saputra",
+    sub: "Menyewa Innova Zenix",
+    initial: "A"
+  },
+  {
+    stars: 5,
+    text: "Dulu agak ragu sewa lepas kunci, tapi setelah register dan upload dokumen lewat web ini rasanya aman banget. Privasi terjaga, instruksi bayar juga jelas di riwayat akun.",
+    name: "Diana Putri",
+    sub: "Menyewa Honda Brio",
+    initial: "D"
+  },
+  {
+    stars: 4,
+    text: "Desain webnya profesional. Fitur cek ketersediaan sangat akurat, jadi saya gak buang waktu milih mobil yang ternyata udah di-booking orang. Sangat direkomendasikan!",
+    name: "Budi Santoso",
+    sub: "Menyewa Honda CR-V",
+    initial: "B"
+  },
+  {
+    stars: 5,
+    text: "Sangat puas dengan sewa lepas kunci di sini. Syarat verifikasinya gak ribet, mobil Avanza yang saya pakai juga sangat prima, bersih, dan wangi saat serah terima.",
+    name: "Rian Hidayat",
+    sub: "Menyewa Toyota Avanza",
+    initial: "R"
+  },
+  {
+    stars: 5,
+    text: "Layanan sopirnya luar biasa. Sangat sopan, tepat waktu saat penjemputan di bandara, dan paham rute-rute jalan alternatif menghindari kemacetan. Sangat terbantu!",
+    name: "Siti Rahma",
+    sub: "Menyewa Toyota Hiace",
+    initial: "S"
+  },
+  {
+    stars: 4,
+    text: "Harga sewa Innova Reborn di sini paling murah dibanding rental lain. Kondisi AC dingin banget, suspensi empuk, dan mesin terawat. Bakal langganan terus.",
+    name: "Eko Prasetyo",
+    sub: "Menyewa Innova Reborn",
+    initial: "E"
+  }
+];
+---
+<!-- Testimoni Section -->
+<section id="testimoni" class="py-20 bg-lightbg">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <SectionHeader
+      tag="Testimoni"
+      title="Apa Kata Pelanggan Kami?"
+    />
+
+    <!-- Swiper -->
+    <div class="swiper testimoniSwiper pb-12" data-aos="fade-up" data-aos-delay="200">
+      <div class="swiper-wrapper">
+        {testimonials.map((testi) => (
+          <div class="swiper-slide h-auto">
+            <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-soft h-full flex flex-col justify-between">
+              <div>
+                <!-- Stars & Quote Icon -->
+                <div class="flex justify-between items-center mb-6">
+                  <div class="flex gap-1 text-accent">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      i < testi.stars ? (
+                        <i class="ph-fill ph-star text-lg"></i>
+                      ) : (
+                        <i class="ph ph-star text-lg"></i>
+                      )
+                    ))}
+                  </div>
+                  <span class="text-slate-200/80 text-6xl font-serif leading-none select-none font-bold">”</span>
+                </div>
+                
+                <!-- Review Text -->
+                <p class="text-slate-600 italic mb-8 text-sm leading-relaxed">"{testi.text}"</p>
+              </div>
+              
+              <!-- User Info -->
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-slate-200/70 text-slate-600 rounded-full flex items-center justify-center font-bold text-sm">
+                  {testi.initial}
+                </div>
+                <div>
+                  <h4 class="font-bold text-navy text-sm">{testi.name}</h4>
+                  <p class="text-xs text-slate-400 font-medium">{testi.sub}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import Swiper from 'swiper';
+  import { Pagination, Autoplay } from 'swiper/modules';
+
+  document.addEventListener("DOMContentLoaded", () => {
+    new Swiper(".testimoniSwiper", {
+      modules: [Pagination, Autoplay],
+      slidesPerView: 1,
+      spaceBetween: 30,
+      loop: true,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      breakpoints: {
+        640: { slidesPerView: 1 },
+        768: { slidesPerView: 2 },
+        1024: { slidesPerView: 3 },
+      },
+      autoplay: {
+        delay: 4000,
+        disableOnInteraction: false,
+      },
+    });
+  });
+</script>

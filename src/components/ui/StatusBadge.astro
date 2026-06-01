@@ -1,0 +1,11 @@
+---
+interface Props {
+  status: boolean;
+}
+const { status } = Astro.props;
+---
+{status ? (
+  <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">Tersedia</span>
+) : (
+  <span class="px-3 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full">Tidak Tersedia</span>
+)}

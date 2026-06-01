@@ -1,0 +1,148 @@
+---
+---
+<!-- Header & Navbar -->
+<header id="header" class="fixed top-0 left-1/2 -translate-x-1/2 w-full z-[100] transition-all duration-500 bg-transparent border-b border-transparent">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+      <!-- Logo -->
+      <div id="logo-container" class="flex-shrink-0 flex items-center gap-2 cursor-pointer">
+        <div class="w-10 h-10 bg-accent rounded-xl flex items-center justify-center text-navy shadow-sm">
+          <i class="ph ph-car-profile text-2xl"></i>
+        </div>
+        <span id="logo-text" class="font-bold text-xl tracking-tight">KGYK<span class="text-accent">.</span></span>
+      </div>
+
+      <!-- Desktop Menu -->
+      <nav class="hidden md:flex space-x-8">
+        <a href="#home" class="font-medium hover:text-primary transition-colors">Beranda</a>
+        <a href="#layanan" class="font-medium hover:text-primary transition-colors">Layanan</a>
+        <a href="#mobil" class="font-medium hover:text-primary transition-colors">Mobil</a>
+        <a href="#keunggulan" class="font-medium hover:text-primary transition-colors">Keunggulan</a>
+        <a href="#testimoni" class="font-medium hover:text-primary transition-colors">Testimoni</a>
+      </nav>
+
+      <!-- CTA & Mobile Toggle -->
+      <div class="flex items-center gap-4">
+        <a
+          href="#mobil"
+          class="hidden lg:inline-flex items-center justify-center px-6 py-2.5 border border-transparent text-sm font-bold rounded-full text-navy bg-accent hover:bg-yellow-500 hover:shadow-lg hover:shadow-accent/20 hover:-translate-y-0.5 transition-all duration-300"
+        >
+          Booking Sekarang
+        </a>
+        <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg transition-colors focus:outline-none">
+          <i class="ph ph-list text-2xl"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu Panel -->
+  <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-100 absolute w-full left-0 top-full shadow-lg transition-all duration-300">
+    <div class="px-4 pt-2 pb-6 space-y-1">
+      <a href="#home" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link">Beranda</a>
+      <a href="#layanan" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link">Layanan</a>
+      <a href="#mobil" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link">Mobil</a>
+      <a href="#keunggulan" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link">Keunggulan</a>
+      <a href="#testimoni" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link">Testimoni</a>
+      <a href="#reservasi" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link">Reservasi</a>
+    </div>
+  </div>
+</header>
+
+<style>
+  #logo-text {
+    color: #0F172A; /* navy */
+    transition: color 0.3s ease;
+  }
+  header:not(.scrolled) #logo-text {
+    color: #FFFFFF;
+  }
+
+  nav a {
+    color: #475569; /* slate-600 */
+    transition: color 0.3s ease;
+  }
+  header:not(.scrolled) nav a {
+    color: rgba(255, 255, 255, 0.8);
+  }
+  header:not(.scrolled) nav a:hover {
+    color: #FFFFFF;
+  }
+
+  #mobile-menu-btn {
+    color: #475569; /* slate-600 */
+    transition: color 0.3s ease, background-color 0.3s ease;
+  }
+  header:not(.scrolled) #mobile-menu-btn {
+    color: #FFFFFF;
+  }
+  #mobile-menu-btn:hover {
+    background-color: rgba(15, 23, 42, 0.05); /* very light navy overlay */
+  }
+  header:not(.scrolled) #mobile-menu-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const header = document.getElementById("header");
+    const mobileBtn = document.getElementById("mobile-menu-btn");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const mobileLinks = document.querySelectorAll(".mobile-link");
+    const logoContainer = document.getElementById("logo-container");
+
+    if (!header || !mobileBtn || !mobileMenu) return;
+
+    // Helper to toggle header state on scroll
+    const checkScroll = () => {
+      if (window.scrollY > 50) {
+        header.classList.add("scrolled");
+        header.classList.remove("top-0", "rounded-none", "bg-transparent", "border-transparent");
+        header.classList.add("top-4", "w-[95%]", "max-w-6xl", "rounded-full", "bg-white/50", "backdrop-blur-lg", "shadow-xl", "shadow-blue-900/10", "border-slate-200/50");
+
+        mobileMenu.classList.add("rounded-2xl", "mt-2", "border", "border-slate-200", "shadow-2xl", "overflow-hidden", "bg-white/50", "backdrop-blur-lg");
+        mobileMenu.classList.remove("border-t", "bg-white");
+      } else {
+        header.classList.remove("scrolled");
+        header.classList.add("top-0", "rounded-none", "bg-transparent", "border-transparent");
+        header.classList.remove("top-4", "w-[95%]", "max-w-6xl", "rounded-full", "bg-white/50", "backdrop-blur-lg", "shadow-xl", "shadow-blue-900/10", "border-slate-200/50");
+
+        mobileMenu.classList.remove("rounded-2xl", "mt-2", "border", "border-slate-200", "shadow-2xl", "overflow-hidden", "bg-white/50", "backdrop-blur-lg");
+        mobileMenu.classList.add("border-t", "bg-white");
+      }
+    };
+
+    window.addEventListener("scroll", checkScroll);
+    checkScroll(); // Run initially to check position
+
+    mobileBtn.addEventListener("click", () => {
+      mobileMenu.classList.toggle("hidden");
+      const icon = mobileBtn.querySelector("i");
+      if (!icon) return;
+      if (mobileMenu.classList.contains("hidden")) {
+        icon.classList.remove("ph-x");
+        icon.classList.add("ph-list");
+      } else {
+        icon.classList.remove("ph-list");
+        icon.classList.add("ph-x");
+      }
+    });
+
+    mobileLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        mobileMenu.classList.add("hidden");
+        const icon = mobileBtn.querySelector("i");
+        if (icon) {
+          icon.classList.replace("ph-x", "ph-list");
+        }
+      });
+    });
+
+    if (logoContainer) {
+      logoContainer.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+  });
+</script>

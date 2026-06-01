@@ -1,0 +1,48 @@
+---
+---
+<!-- Hero Section -->
+<section id="home" class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 hero-bg overflow-hidden">
+  <!-- Decorative Shapes -->
+  <div class="absolute top-20 right-0 w-72 h-72 bg-primary rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
+  <div class="absolute bottom-10 left-10 w-72 h-72 bg-accent rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style="animation-delay: 2s"></div>
+
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="flex flex-col items-center gap-12">
+      <!-- Text Content -->
+      <div class="w-full max-w-4xl mx-auto text-center gsap-hero-text gsap-hidden">
+        <span class="inline-block py-1 px-3 rounded-full bg-white/10 text-accent border border-white/20 text-sm font-semibold mb-6 backdrop-blur-sm"> #1 Pilihan Transportasi Anda </span>
+        <h1 class="text-4xl md:text-5xl lg:text-7xl font-extrabold text-white leading-tight mb-6">Rental Mobil <span class="gradient-text">Mudah, Cepat,</span> dan Terpercaya</h1>
+        <p class="text-lg md:text-xl text-slate-300 mb-8 max-w-3xl mx-auto">Sewa mobil harian, mingguan, atau bulanan dengan pilihan kendaraan terbaik untuk perjalanan pribadi, keluarga, maupun bisnis.</p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a href="#mobil" class="w-full sm:w-auto px-8 py-4 bg-accent hover:bg-yellow-500 text-navy font-bold rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg shadow-accent/30 text-center">
+            Lihat Katalog Mobil
+          </a>
+          <a
+            href="#reservasi"
+            class="w-full sm:w-auto px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-full border border-white/30 backdrop-blur-sm transition-all duration-300 text-center flex items-center justify-center gap-2"
+          >
+            <i class="ph ph-calendar-plus text-xl text-white"></i>
+            Reservasi Online
+          </a>
+        </div>
+
+        <div class="mt-10 flex items-center justify-center gap-6 text-slate-300 text-sm font-medium flex-wrap">
+          <div class="flex items-center gap-2"><i class="ph-fill ph-check-circle text-accent"></i> Beragam Pilihan</div>
+          <div class="flex items-center gap-2"><i class="ph-fill ph-check-circle text-accent"></i> Harga Transparan</div>
+          <div class="flex items-center gap-2"><i class="ph-fill ph-check-circle text-accent"></i> Layanan 24/7</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+
+  document.addEventListener("DOMContentLoaded", () => {
+    gsap.fromTo(".gsap-hero-text", 
+      { y: 50, opacity: 0, visibility: "visible" }, 
+      { y: 0, opacity: 1, duration: 1, ease: "power3.out" }
+    );
+  });
+</script>

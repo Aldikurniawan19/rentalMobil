@@ -1,0 +1,55 @@
+---
+const advantages = [
+  {
+    icon: "ph-fill ph-sparkle",
+    title: "Armada Bersih",
+    desc: "Mobil selalu dicuci dan dirawat secara rutin sebelum diserahkan ke pelanggan."
+  },
+  {
+    icon: "ph-fill ph-money",
+    title: "Harga Transparan",
+    desc: "Tidak ada biaya tersembunyi. Harga yang tertera adalah harga yang Anda bayar."
+  },
+  {
+    icon: "ph-fill ph-clock",
+    title: "Booking Mudah",
+    desc: "Proses reservasi sangat cepat menggunakan form sistem online di website kami."
+  },
+  {
+    icon: "ph-fill ph-user-gear",
+    title: "Sopir Profesional",
+    desc: "Sopir ramah, berpengalaman, dan memahami rute perjalanan dengan sangat baik."
+  }
+];
+---
+<!-- Keunggulan Section -->
+<section id="keunggulan" class="py-20 bg-navy text-white overflow-hidden relative">
+  <div class="absolute top-0 right-0 w-1/2 h-full bg-blue-900/20 transform skew-x-12"></div>
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="flex flex-col lg:flex-row gap-16 items-center">
+      <!-- Left Info Column -->
+      <div class="lg:w-1/2" data-aos="fade-right">
+        <h4 class="text-accent font-bold tracking-wider uppercase text-sm mb-2">Mengapa Memilih Kami</h4>
+        <h2 class="text-3xl md:text-4xl font-bold mb-6">Keunggulan Layanan Rental Kami</h2>
+        <p class="text-slate-300 mb-8 text-lg">Komitmen kami adalah memberikan pelayanan terbaik, kendaraan prima, dan kemudahan dalam setiap proses perjalanan Anda.</p>
+
+        <img src="https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=800&q=80" alt="Layanan Terbaik" class="rounded-2xl shadow-2xl border border-white/10" />
+      </div>
+
+      <!-- Right Grid Column -->
+      <div class="lg:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {advantages.map((advantage, index) => (
+          <div
+            class="bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-sm hover:bg-white/10 transition-colors"
+            data-aos="fade-up"
+            data-aos-delay={(index + 1) * 100}
+          >
+            <i class={`${advantage.icon} text-3xl text-accent mb-4 block`}></i>
+            <h3 class="text-lg font-bold mb-2">{advantage.title}</h3>
+            <p class="text-slate-400 text-sm">{advantage.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,163 @@
+---
+import { cars } from '../../data/cars';
+---
+<!-- Reservasi & Kontak Section -->
+<section id="reservasi" class="py-20 bg-lightbg relative">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="bg-white rounded-3xl shadow-xl overflow-hidden">
+      <div class="flex flex-col lg:flex-row">
+        <!-- Info Kontak -->
+        <div class="lg:w-2/5 bg-navy text-white p-10 lg:p-12 relative overflow-hidden">
+          <!-- Decorative bg -->
+          <div class="absolute top-0 right-0 w-64 h-64 bg-primary rounded-full filter blur-3xl opacity-20 -translate-y-1/2 translate-x-1/3"></div>
+
+          <div class="relative z-10">
+            <h3 class="text-3xl font-bold mb-2">Hubungi Kami</h3>
+            <p class="text-slate-300 mb-10">Kami siap melayani kebutuhan transportasi Anda 24 jam setiap harinya.</p>
+
+            <div class="space-y-6">
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 bg-white/10 rounded-full flex flex-shrink-0 items-center justify-center text-accent text-xl">
+                  <i class="ph-fill ph-map-pin"></i>
+                </div>
+                <div>
+                  <h4 class="font-semibold mb-1">Alamat Kantor</h4>
+                  <p class="text-slate-300 text-sm leading-relaxed">Jl. Raya Sudirman No. 123, Pusat Kota, Jakarta, 12345</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 bg-white/10 rounded-full flex flex-shrink-0 items-center justify-center text-accent text-xl">
+                  <i class="ph-fill ph-phone"></i>
+                </div>
+                <div>
+                  <h4 class="font-semibold mb-1">Telepon / WhatsApp</h4>
+                  <p class="text-slate-300 text-sm">+62 812 3456 7890</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 bg-white/10 rounded-full flex flex-shrink-0 items-center justify-center text-accent text-xl">
+                  <i class="ph-fill ph-envelope-simple"></i>
+                </div>
+                <div>
+                  <h4 class="font-semibold mb-1">Email</h4>
+                  <p class="text-slate-300 text-sm">cs@kgyk.com</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-12 flex gap-4">
+              <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary rounded-full flex items-center justify-center text-white transition-colors">
+                <i class="ph-fill ph-instagram-logo"></i>
+              </a>
+              <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary rounded-full flex items-center justify-center text-white transition-colors">
+                <i class="ph-fill ph-facebook-logo"></i>
+              </a>
+              <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary rounded-full flex items-center justify-center text-white transition-colors">
+                <i class="ph-fill ph-twitter-logo"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Section -->
+        <div class="lg:w-3/5 p-10 lg:p-12">
+          <h3 class="text-2xl font-bold text-navy mb-6">Form Reservasi Online</h3>
+          <form id="contactForm" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Lengkap</label>
+                <input
+                  type="text"
+                  id="formName"
+                  required
+                  class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-slate-50 focus:bg-white text-slate-800"
+                  placeholder="Masukkan nama Anda"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">Nomor WhatsApp</label>
+                <input
+                  type="tel"
+                  id="formWa"
+                  required
+                  class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-slate-50 focus:bg-white text-slate-800"
+                  placeholder="0812xxxxxx"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">Pilihan Mobil (Opsional)</label>
+                <select id="formCar" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-slate-50 focus:bg-white text-slate-700">
+                  <option value="">Pilih Mobil / Belum Tahu</option>
+                  {cars.map((car) => (
+                    <option value={car.name}>{car.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">Tanggal Sewa</label>
+                  <input
+                    type="date"
+                    id="formDate"
+                    required
+                    class="w-full px-3 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-slate-50 focus:bg-white text-slate-700"
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">Durasi (Hari)</label>
+                  <input
+                    type="number"
+                    id="formDuration"
+                    min="1"
+                    required
+                    class="w-full px-3 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-slate-50 focus:bg-white text-slate-800"
+                    placeholder="Misal: 3"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-2">Pesan Tambahan</label>
+              <textarea
+                id="formMessage"
+                rows="4"
+                class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-slate-50 focus:bg-white resize-none text-slate-800"
+                placeholder="Tuliskan tujuan perjalanan, request khusus, dsb."
+              ></textarea>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full flex justify-center items-center gap-2 py-4 px-8 border border-transparent rounded-xl shadow-sm text-base font-bold text-white bg-primary hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all transform hover:-translate-y-1 hover:shadow-lg"
+            >
+              <i class="ph ph-check-circle text-2xl"></i>
+              Konfirmasi Reservasi
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("contactForm");
+
+    if (form) {
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        // Dispatch the custom event to notify SuccessModal
+        window.dispatchEvent(new CustomEvent("booking-success"));
+
+        // Reset the form
+        (form as HTMLFormElement).reset();
+      });
+    }
+  });
+</script>

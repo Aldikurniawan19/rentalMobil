@@ -1,0 +1,52 @@
+---
+import '../styles/global.css';
+import 'aos/dist/aos.css';
+import 'swiper/css/bundle';
+
+interface Props {
+  title?: string;
+  description?: string;
+  keywords?: string;
+}
+
+const {
+  title = "Rental Mobil Terpercaya | Sewa Mobil Harian, Mingguan, dan Bulanan",
+  description = "Sewa mobil mudah dan terpercaya dengan berbagai pilihan armada bersih, harga transparan, serta layanan rental harian, mingguan, dan bulanan.",
+  keywords = "rental mobil, sewa mobil, rental mobil harian, rental mobil bulanan, sewa mobil dengan sopir, rental mobil lepas kunci"
+} = Astro.props;
+---
+<!doctype html>
+<html lang="id" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web" is:inline></script>
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body class="bg-lightbg text-slate-800 antialiased selection:bg-primary selection:text-white">
+    <slot />
+
+    <script>
+      import AOS from 'aos';
+
+      // Initialize AOS when page loads
+      document.addEventListener("DOMContentLoaded", () => {
+        AOS.init({
+          duration: 800,
+          once: true,
+          offset: 100,
+        });
+      });
+    </script>
+  </body>
+</html>

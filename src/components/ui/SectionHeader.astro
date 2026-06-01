@@ -1,0 +1,24 @@
+---
+interface Props {
+  tag?: string;
+  title: string;
+  description?: string;
+  theme?: 'light' | 'dark';
+}
+const { tag, title, description, theme = 'light' } = Astro.props;
+---
+<div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
+  {tag && (
+    <h4 class={theme === 'light' ? "text-primary font-bold tracking-wider uppercase text-sm mb-2" : "text-accent font-bold tracking-wider uppercase text-sm mb-2"}>
+      {tag}
+    </h4>
+  )}
+  <h2 class={`text-3xl md:text-4xl font-bold mb-4 ${theme === 'light' ? 'text-navy' : 'text-white'}`}>
+    {title}
+  </h2>
+  {description && (
+    <p class={theme === 'light' ? "text-slate-600" : "text-slate-300"}>
+      {description}
+    </p>
+  )}
+</div>

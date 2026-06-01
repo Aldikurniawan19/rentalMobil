@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+  --color-navy: #0F172A;
+  --color-primary: #2563EB;
+  --color-accent: #FACC15;
+  --color-lightbg: #F8FAFC;
+  --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
+}
+
+/* Custom Styles */
+body {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  overflow-x: hidden;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #facc15, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-bg {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(37, 99, 235, 0.85)), url("https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=2070&auto=format&fit=crop");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+/* Hide Scrollbar but keep functionality */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Swiper Customization */
+.swiper-pagination-bullet-active {
+  background-color: #2563eb !important;
+}
+
+/* Initial state for GSAP */
+.gsap-hidden {
+  visibility: hidden;
+}
+
+/* Floating Animation */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.filter-btn.active {
+  background-color: #2563eb;
+  color: white;
+}
+
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  left: 19px;
+  top: 40px;
+  bottom: -20px;
+  width: 2px;
+  background-color: #e2e8f0;
+  z-index: 0;
+}
+.timeline-item:last-child::before {
+  display: none;
+}

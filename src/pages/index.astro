@@ -1,0 +1,47 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/sections/Hero.astro';
+import Stats from '../components/sections/Stats.astro';
+import Services from '../components/sections/Services.astro';
+import CarCatalog from '../components/sections/CarCatalog.astro';
+import WhyChooseUs from '../components/sections/WhyChooseUs.astro';
+import BookingSteps from '../components/sections/BookingSteps.astro';
+import PromoBanner from '../components/sections/PromoBanner.astro';
+import Testimonials from '../components/sections/Testimonials.astro';
+import Faq from '../components/sections/Faq.astro';
+import BookingForm from '../components/sections/BookingForm.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import CarDetailModal from '../components/CarDetailModal.astro';
+import SuccessModal from '../components/SuccessModal.astro';
+---
+
+<Layout title="Rental Mobil Terpercaya | Sewa Mobil Harian, Mingguan, dan Bulanan">
+  <!-- Navigation Header -->
+  <Header />
+
+  <!-- Main Body Sections -->
+  <main>
+    <Hero />
+    <Stats />
+    <Services />
+    <CarCatalog />
+    <WhyChooseUs />
+    <BookingSteps />
+    <PromoBanner />
+    <Testimonials />
+    <Faq />
+    <BookingForm />
+  </main>
+
+  <!-- Footer -->
+  <Footer />
+
+  <!-- Modals & Overlays -->
+  <CarDetailModal />
+  <SuccessModal />
+
+  <!-- Floating Shortcuts -->
+  <WhatsAppButton />
+</Layout>
