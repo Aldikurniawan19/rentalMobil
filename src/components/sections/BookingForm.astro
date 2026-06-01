@@ -219,47 +219,7 @@ import { cars } from '../../data/cars';
       </div>
     </div>
 
-    <!-- User Dashboard / Booking History -->
-    <div id="booking-history-section" class="hidden mt-16 bg-white rounded-3xl p-8 lg:p-10 shadow-xl border border-slate-100 animate-fade-in">
-      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-        <div>
-          <h3 class="text-2xl font-bold text-navy">Riwayat Pemesanan</h3>
-          <p class="text-slate-500 text-sm">Kelola status dan jadwal penyewaan kendaraan Anda.</p>
-        </div>
-        
-        <!-- Admin Simulation Switch -->
-        <div class="flex items-center gap-3 bg-slate-100 border border-slate-200/50 rounded-2xl px-4 py-2 text-slate-700">
-          <span class="text-xs font-bold flex items-center gap-1.5 text-navy">
-            <i class="ph ph-shield-check text-base text-primary"></i>
-            Simulasi Mode Admin
-          </span>
-          <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" id="adminModeToggle" class="sr-only peer" />
-            <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-          </label>
-        </div>
-      </div>
 
-      <!-- Bookings Table -->
-      <div class="overflow-x-auto rounded-2xl border border-slate-100">
-        <table class="min-w-full divide-y divide-slate-100 bg-white">
-          <thead class="bg-slate-50">
-            <tr>
-              <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">ID</th>
-              <th id="th-user" scope="col" class="hidden px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Pelanggan</th>
-              <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Mobil</th>
-              <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Jadwal Sewa</th>
-              <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Biaya</th>
-              <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
-              <th id="th-actions" scope="col" class="hidden px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Verifikasi</th>
-            </tr>
-          </thead>
-          <tbody id="booking-list" class="divide-y divide-slate-100">
-            <!-- Dynamic data rows -->
-          </tbody>
-        </table>
-      </div>
-    </div>
 
   </div>
 </section>
@@ -287,12 +247,7 @@ import { cars } from '../../data/cars';
     const totalPriceContainer = document.getElementById("estimate-price-total");
     const estimateSection = document.getElementById("price-estimate-section");
 
-    // History and Admin Panel
-    const bookingHistorySection = document.getElementById("booking-history-section");
-    const bookingListContainer = document.getElementById("booking-list");
-    const adminToggle = document.getElementById("adminModeToggle") as HTMLInputElement | null;
-    const thUser = document.getElementById("th-user");
-    const thActions = document.getElementById("th-actions");
+
     
     const btnFormLogin = document.getElementById("btn-form-login");
     const btnFormRegister = document.getElementById("btn-form-register");
@@ -347,118 +302,7 @@ import { cars } from '../../data/cars';
     formDateStart?.addEventListener("change", updateEstimates);
     formDateEnd?.addEventListener("change", updateEstimates);
 
-    // Initial check and render bookings
-    const renderBookings = () => {
-      if (!bookingListContainer || !bookingHistorySection) return;
 
-      const currentUser = JSON.parse(localStorage.getItem("kgyk_current_user") || "null");
-      if (!currentUser) {
-        bookingHistorySection.classList.add("hidden");
-        return;
-      }
-
-      bookingHistorySection.classList.remove("hidden");
-      const isAdmin = adminToggle ? adminToggle.checked : false;
-      const bookings = JSON.parse(localStorage.getItem("kgyk_bookings") || "[]");
-      
-      // Filter list
-      const displayedBookings = isAdmin 
-        ? bookings 
-        : bookings.filter((b: any) => b.userEmail === currentUser.email);
-
-      // Hide or show columns
-      if (isAdmin) {
-        thUser?.classList.remove("hidden");
-        thActions?.classList.remove("hidden");
-      } else {
-        thUser?.classList.add("hidden");
-        thActions?.classList.add("hidden");
-      }
-
-      bookingListContainer.innerHTML = "";
-
-      if (displayedBookings.length === 0) {
-        bookingListContainer.innerHTML = `
-          <tr>
-            <td colspan="${isAdmin ? 7 : 5}" class="px-6 py-12 text-center text-slate-400 text-sm">
-              <i class="ph ph-calendar text-4xl block mb-2 text-slate-300"></i>
-              Belum ada data pemesanan.
-            </td>
-          </tr>
-        `;
-        return;
-      }
-
-      displayedBookings.forEach((b: any) => {
-        let statusClass = "bg-amber-100 text-amber-700 border-amber-200";
-        if (b.status === "Disetujui") statusClass = "bg-green-100 text-green-700 border-green-200";
-        if (b.status === "Ditolak") statusClass = "bg-red-100 text-red-700 border-red-200";
-
-        const formattedStart = new Date(b.startDate).toLocaleDateString("id-ID", { day: 'numeric', month: 'short', year: 'numeric' });
-        const formattedEnd = new Date(b.endDate).toLocaleDateString("id-ID", { day: 'numeric', month: 'short', year: 'numeric' });
-
-        const adminControls = isAdmin ? `
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-            <div class="flex items-center gap-2">
-              ${b.status === "Menunggu Verifikasi" ? `
-                <button data-approve-id="${b.id}" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow-sm hover:shadow-md cursor-pointer">Setujui</button>
-                <button data-reject-id="${b.id}" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow-sm hover:shadow-md cursor-pointer">Tolak</button>
-              ` : `<span class="text-xs text-slate-400 font-semibold">${b.status}</span>`}
-            </div>
-          </td>
-        ` : "";
-
-        const row = `
-          <tr class="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-navy">#${b.id.toString().slice(-6)}</td>
-            ${isAdmin ? `<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-medium">${b.userName}</td>` : ""}
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800 font-bold">${b.carName}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-              <span class="block font-semibold text-slate-700">${formattedStart} - ${formattedEnd}</span>
-              <span class="text-xs text-slate-400">${b.duration} Hari (${b.serviceType})</span>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-navy">${formatRupiah(b.totalPrice)}</td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <span class="px-2.5 py-1 inline-flex text-xs font-bold leading-5 rounded-full border ${statusClass}">
-                ${b.status}
-              </span>
-            </td>
-            ${adminControls}
-          </tr>
-        `;
-        bookingListContainer.insertAdjacentHTML("beforeend", row);
-      });
-
-      // Bind actions
-      if (isAdmin) {
-        bookingListContainer.querySelectorAll("[data-approve-id]").forEach((btn) => {
-          btn.addEventListener("click", () => {
-            const id = parseInt(btn.getAttribute("data-approve-id") || "0");
-            updateBookingStatus(id, "Disetujui");
-          });
-        });
-        
-        bookingListContainer.querySelectorAll("[data-reject-id]").forEach((btn) => {
-          btn.addEventListener("click", () => {
-            const id = parseInt(btn.getAttribute("data-reject-id") || "0");
-            updateBookingStatus(id, "Ditolak");
-          });
-        });
-      }
-    };
-
-    const updateBookingStatus = (id: number, status: "Disetujui" | "Ditolak") => {
-      const bookings = JSON.parse(localStorage.getItem("kgyk_bookings") || "[]");
-      const index = bookings.findIndex((b: any) => b.id === id);
-      if (index !== -1) {
-        bookings[index].status = status;
-        localStorage.setItem("kgyk_bookings", JSON.stringify(bookings));
-        renderBookings();
-        alert(`Pesanan #${id.toString().slice(-6)} berhasil ${status.toLowerCase()}!`);
-      }
-    };
-
-    adminToggle?.addEventListener("change", renderBookings);
 
     // Form submit validation & conflict checking
     form?.addEventListener("submit", (e) => {
@@ -466,7 +310,11 @@ import { cars } from '../../data/cars';
 
       const currentUser = JSON.parse(localStorage.getItem("kgyk_current_user") || "null");
       if (!currentUser) {
-        alert("Silakan login terlebih dahulu untuk melakukan pemesanan.");
+        if ((window as any).showToast) {
+          (window as any).showToast("Silakan login terlebih dahulu untuk melakukan pemesanan.", "error");
+        } else {
+          alert("Silakan login terlebih dahulu untuk melakukan pemesanan.");
+        }
         return;
       }
 
@@ -475,7 +323,11 @@ import { cars } from '../../data/cars';
       const selectedCarName = formCar.value;
       const car = cars.find(c => c.name === selectedCarName);
       if (!car) {
-        alert("Silakan pilih kendaraan.");
+        if ((window as any).showToast) {
+          (window as any).showToast("Silakan pilih kendaraan.", "error");
+        } else {
+          alert("Silakan pilih kendaraan.");
+        }
         return;
       }
 
@@ -485,7 +337,11 @@ import { cars } from '../../data/cars';
       const end = new Date(endDateStr);
 
       if (end < start) {
-        alert("Tanggal selesai tidak boleh sebelum tanggal mulai.");
+        if ((window as any).showToast) {
+          (window as any).showToast("Tanggal selesai tidak boleh sebelum tanggal mulai.", "error");
+        } else {
+          alert("Tanggal selesai tidak boleh sebelum tanggal mulai.");
+        }
         return;
       }
 
@@ -505,7 +361,11 @@ import { cars } from '../../data/cars';
       });
 
       if (isConflicted) {
-        alert(`Maaf, mobil ${selectedCarName} tidak tersedia pada tanggal tersebut karena sudah di-booking oleh penyewa lain. Silakan pilih tanggal atau jenis kendaraan lain.`);
+        if ((window as any).showToast) {
+          (window as any).showToast(`Maaf, mobil ${selectedCarName} tidak tersedia pada tanggal tersebut.`, "error");
+        } else {
+          alert(`Maaf, mobil ${selectedCarName} tidak tersedia pada tanggal tersebut karena sudah di-booking oleh penyewa lain. Silakan pilih tanggal atau jenis kendaraan lain.`);
+        }
         return;
       }
 
@@ -536,7 +396,6 @@ import { cars } from '../../data/cars';
       // Reset
       form.reset();
       updateEstimates();
-      renderBookings();
     });
 
     const updateUIState = () => {
@@ -547,17 +406,31 @@ import { cars } from '../../data/cars';
         if (formName) {
           formName.value = currentUser.fullName;
         }
-        renderBookings();
       } else {
         loggedOutState.classList.remove("hidden");
         loggedInState.classList.add("hidden");
-        if (bookingHistorySection) {
-          bookingHistorySection.classList.add("hidden");
-        }
       }
     };
 
     window.addEventListener("auth-changed", updateUIState);
     updateUIState(); // Run initial state check
+
+    // Parse query parameter to pre-select a car
+    const urlParams = new URLSearchParams(window.location.search);
+    const carParam = urlParams.get("car");
+    if (carParam && formCar) {
+      const options = Array.from(formCar.options);
+      const match = options.find(opt => opt.value.toLowerCase() === carParam.toLowerCase());
+      if (match) {
+        formCar.value = match.value;
+        updateEstimates();
+        const reservationSection = document.getElementById("reservasi");
+        if (reservationSection) {
+          setTimeout(() => {
+            reservationSection.scrollIntoView({ behavior: "smooth" });
+          }, 300);
+        }
+      }
+    }
   });
 </script>

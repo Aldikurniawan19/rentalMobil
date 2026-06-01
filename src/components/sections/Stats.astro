@@ -77,7 +77,11 @@ import { cars } from '../../data/cars';
       const end = new Date(dateEnd.value);
 
       if (end < start) {
-        alert("Tanggal selesai tidak boleh sebelum tanggal mulai.");
+        if ((window as any).showToast) {
+          (window as any).showToast("Tanggal selesai tidak boleh sebelum tanggal mulai.", "error");
+        } else {
+          alert("Tanggal selesai tidak boleh sebelum tanggal mulai.");
+        }
         return;
       }
 
@@ -156,7 +160,11 @@ import { cars } from '../../data/cars';
           // Check authentication
           const currentUser = JSON.parse(localStorage.getItem("kgyk_current_user") || "null");
           if (!currentUser) {
-            alert("Silakan login atau daftar akun terlebih dahulu untuk melakukan pemesanan.");
+            if ((window as any).showToast) {
+              (window as any).showToast("Silakan login atau daftar akun terlebih dahulu untuk melakukan pemesanan.", "error");
+            } else {
+              alert("Silakan login atau daftar akun terlebih dahulu untuk melakukan pemesanan.");
+            }
             if ((window as any).openLoginModal) {
               (window as any).openLoginModal();
             }

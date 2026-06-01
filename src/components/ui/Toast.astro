@@ -1,0 +1,58 @@
+---
+---
+<!-- Toast Container -->
+<div id="toast-container" class="fixed top-6 left-1/2 -translate-x-1/2 z-[200] flex flex-col gap-3 w-[90%] max-w-sm pointer-events-none">
+</div>
+
+<script is:inline>
+  window.showToast = (message, type = 'success') => {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+
+    // Create toast element
+    const toast = document.createElement('div');
+    toast.className = `flex items-center gap-3 px-5 py-4 bg-white rounded-2xl shadow-2xl border border-slate-100/50 pointer-events-auto transform translate-y-[-20px] opacity-0 transition-all duration-500 z-[200]`;
+    
+    // Choose icon and border based on type
+    let iconHTML = '';
+    if (type === 'success') {
+      toast.classList.add('border-l-4', 'border-l-green-500');
+      iconHTML = `<div class="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center text-green-500 flex-shrink-0"><i class="ph-fill ph-check-circle text-xl"></i></div>`;
+    } else if (type === 'error') {
+      toast.classList.add('border-l-4', 'border-l-red-500');
+      iconHTML = `<div class="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center text-red-500 flex-shrink-0"><i class="ph-fill ph-warning-circle text-xl"></i></div>`;
+    } else {
+      toast.classList.add('border-l-4', 'border-l-blue-500');
+      iconHTML = `<div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-500 flex-shrink-0"><i class="ph-fill ph-info text-xl"></i></div>`;
+    }
+
+    toast.innerHTML = `
+      ${iconHTML}
+      <div class="flex-grow min-w-0">
+        <p class="text-sm font-bold text-navy leading-snug">${message}</p>
+      </div>
+      <button class="text-slate-400 hover:text-slate-600 transition-colors flex-shrink-0 ml-2 cursor-pointer" onclick="this.parentElement.remove()">
+        <i class="ph ph-x text-lg"></i>
+      </button>
+    `;
+
+    container.appendChild(toast);
+
+    // Trigger entrance animation
+    setTimeout(() => {
+      toast.classList.remove('translate-y-[-20px]', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+    }, 10);
+
+    // Auto dismiss after 3.5s
+    setTimeout(() => {
+      if (toast.parentElement) {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-[-20px]', 'opacity-0');
+        setTimeout(() => {
+          if (toast.parentElement) toast.remove();
+        }, 500);
+      }
+    }, 3500);
+  };
+</script>

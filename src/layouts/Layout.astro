@@ -3,6 +3,7 @@ import '../styles/global.css';
 import 'aos/dist/aos.css';
 import 'swiper/css/bundle';
 import AuthModals from '../components/auth/AuthModals.astro';
+import Toast from '../components/ui/Toast.astro';
 
 interface Props {
   title?: string;
@@ -38,6 +39,7 @@ const {
     <slot />
 
     <AuthModals />
+    <Toast />
 
     <script>
       import AOS from 'aos';

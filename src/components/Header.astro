@@ -56,7 +56,7 @@
             
             <div class="py-1">
               <a
-                href="#reservasi"
+                href="/history"
                 id="dropdown-history-btn"
                 class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 hover:text-primary transition-all cursor-pointer"
               >
@@ -108,7 +108,7 @@
             <span id="mobile-user-email" class="text-xs text-slate-400 truncate"></span>
           </div>
         </div>
-        <a href="#reservasi" class="block px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link flex items-center gap-2.5 transition-colors">
+        <a href="/history" class="block px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link flex items-center gap-2.5 transition-colors">
           <i class="ph ph-clock-counter-clockwise text-lg text-slate-400"></i> Riwayat Sewa
         </a>
         <button id="mobile-logout-btn" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-semibold text-red-600 hover:bg-red-50 flex items-center gap-2.5 cursor-pointer transition-colors">
@@ -364,7 +364,11 @@
     const handleLogout = () => {
       localStorage.removeItem("kgyk_current_user");
       window.dispatchEvent(new CustomEvent("auth-changed"));
-      alert("Anda telah berhasil keluar.");
+      if ((window as any).showToast) {
+        (window as any).showToast("Anda telah berhasil keluar.", "info");
+      } else {
+        alert("Anda telah berhasil keluar.");
+      }
       // Reset hash if it was reservasi
       if (window.location.hash === "#reservasi") {
         window.location.hash = "";

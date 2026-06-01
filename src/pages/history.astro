@@ -1,0 +1,317 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Riwayat Pemesanan | KGYK">
+  <!-- Main Section -->
+  <main class="pt-12 pb-20 bg-lightbg min-h-[85vh] font-sans">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+      
+      <!-- Back Button & Brand Header Row -->
+      <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <a href="/" class="inline-flex items-center gap-2.5 text-slate-600 hover:text-primary transition-all font-bold bg-white px-5 py-3 rounded-2xl shadow-soft border border-slate-100/60 max-w-max hover:shadow-md">
+          <i class="ph ph-arrow-left text-lg font-bold text-primary"></i>
+          <span>Kembali ke Beranda</span>
+        </a>
+
+        <div class="flex items-center gap-2">
+          <span class="w-8 h-8 rounded-lg bg-accent text-navy flex items-center justify-center font-black text-sm">K</span>
+          <span class="text-xl font-black text-navy tracking-tight">KGYK <span class="text-primary font-bold">Rental</span></span>
+        </div>
+      </div>
+      
+      <!-- Logged Out State -->
+      <div id="history-logged-out" class="bg-white rounded-3xl p-8 md:p-12 text-center shadow-soft border border-slate-100/60 max-w-md mx-auto">
+        <div class="w-20 h-20 bg-slate-50 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-6">
+          <i class="ph ph-lock text-4xl"></i>
+        </div>
+        <h3 class="text-2xl font-bold text-navy mb-3">Akses Terkunci</h3>
+        <p class="text-slate-500 text-sm mb-8">Silakan masuk atau daftar akun terlebih dahulu untuk melihat riwayat pemesanan sewa mobil Anda.</p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+          <button id="history-login-btn" class="px-6 py-3 bg-primary hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition-all shadow-md cursor-pointer">
+            Masuk Akun
+          </button>
+          <button id="history-register-btn" class="px-6 py-3 border border-slate-200 text-slate-700 hover:bg-slate-50 font-bold rounded-xl text-sm transition-all cursor-pointer">
+            Daftar Baru
+          </button>
+        </div>
+      </div>
+
+      <!-- Logged In State (Dashboard) -->
+      <div id="history-logged-in" class="hidden">
+        <div class="bg-white rounded-3xl p-8 lg:p-10 shadow-soft border border-slate-100/60">
+          <!-- Header Area -->
+          <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+            <div>
+              <h3 class="text-2xl font-bold text-navy">Riwayat Pemesanan</h3>
+              <p class="text-slate-500 text-sm">Kelola status, jadwal penyewaan, dan kelengkapan kendaraan Anda.</p>
+            </div>
+            
+            <!-- Admin Simulator Mode Toggle -->
+            <div class="flex items-center gap-3 bg-slate-100 border border-slate-200/50 rounded-2xl px-4 py-2 text-slate-700">
+              <span class="text-xs font-bold flex items-center gap-1.5 text-navy">
+                <i class="ph ph-shield-check text-base text-primary"></i>
+                Simulasi Mode Admin
+              </span>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="adminModeToggle" class="sr-only peer" />
+                <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Cards Grid Container -->
+          <div id="booking-cards-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Dynamically Rendered Booking Cards -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <Footer />
+</Layout>
+
+<script>
+  import { cars } from '../data/cars';
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const loggedOutPanel = document.getElementById("history-logged-out");
+    const loggedInPanel = document.getElementById("history-logged-in");
+    
+    const bookingCardsContainer = document.getElementById("booking-cards-container");
+    const adminToggle = document.getElementById("adminModeToggle") as HTMLInputElement | null;
+    
+    const loginBtn = document.getElementById("history-login-btn");
+    const registerBtn = document.getElementById("history-register-btn");
+
+    if (!loggedOutPanel || !loggedInPanel || !bookingCardsContainer) return;
+
+    // Login Modal Triggers
+    loginBtn?.addEventListener("click", () => {
+      if ((window as any).openLoginModal) (window as any).openLoginModal();
+    });
+
+    registerBtn?.addEventListener("click", () => {
+      if ((window as any).openRegisterModal) (window as any).openRegisterModal();
+    });
+
+    const formatRupiah = (number: number) => {
+      return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0
+      }).format(number);
+    };
+
+    const renderBookings = () => {
+      const currentUser = JSON.parse(localStorage.getItem("kgyk_current_user") || "null");
+      if (!currentUser) return;
+
+      const isAdmin = adminToggle ? adminToggle.checked : false;
+      const bookings = JSON.parse(localStorage.getItem("kgyk_bookings") || "[]");
+      
+      const displayedBookings = isAdmin 
+        ? bookings 
+        : bookings.filter((b: any) => b.userEmail === currentUser.email);
+
+      bookingCardsContainer.innerHTML = "";
+
+      if (displayedBookings.length === 0) {
+        bookingCardsContainer.innerHTML = `
+          <div class="col-span-full text-center py-16 px-4 bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
+            <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400">
+              <i class="ph ph-calendar-blank text-3xl"></i>
+            </div>
+            <h4 class="text-navy font-bold text-lg mb-1">Belum Ada Pemesanan</h4>
+            <p class="text-slate-500 text-sm max-w-sm mx-auto mb-6">Anda belum memesan kendaraan apapun. Pilih armada favorit Anda dan nikmati perjalanan menyenangkan.</p>
+            <a href="/" class="px-5 py-2.5 bg-primary hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition-all shadow-sm">
+              Cari Mobil Sekarang
+            </a>
+          </div>
+        `;
+        return;
+      }
+
+      displayedBookings.forEach((b: any) => {
+        let statusClass = "bg-amber-50 text-amber-700 border-amber-200/60";
+        let statusIcon = "ph-clock";
+        if (b.status === "Disetujui") {
+          statusClass = "bg-green-50 text-green-700 border-green-200/60";
+          statusIcon = "ph-check-circle";
+        }
+        if (b.status === "Ditolak") {
+          statusClass = "bg-red-50 text-red-700 border-red-200/60";
+          statusIcon = "ph-x-circle";
+        }
+        if (b.status === "Selesai") {
+          statusClass = "bg-blue-50 text-blue-700 border-blue-200/60";
+          statusIcon = "ph-circle-wavy-check";
+        }
+
+        const formattedStart = new Date(b.startDate).toLocaleDateString("id-ID", { day: 'numeric', month: 'short', year: 'numeric' });
+        const formattedEnd = new Date(b.endDate).toLocaleDateString("id-ID", { day: 'numeric', month: 'short', year: 'numeric' });
+
+        const adminControls = isAdmin ? `
+          <div class="flex items-center gap-2">
+            ${b.status === "Menunggu Verifikasi" ? `
+              <button data-approve-id="${b.id}" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition-all shadow-sm hover:shadow cursor-pointer">Setujui</button>
+              <button data-reject-id="${b.id}" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition-all shadow-sm hover:shadow cursor-pointer">Tolak</button>
+            ` : b.status === "Disetujui" ? `
+              <button data-complete-id="${b.id}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition-all shadow-sm hover:shadow cursor-pointer">Selesaikan</button>
+            ` : `<span class="text-[10px] text-slate-400 font-bold bg-slate-50 border border-slate-100 rounded-lg px-2 py-1">${b.status}</span>`}
+          </div>
+        ` : "";
+
+        // Find vehicle details
+        const car = cars.find(c => c.name === b.carName);
+        const carImg = car ? car.img : "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=600&q=80";
+        const carType = car ? car.type : "Armada";
+
+        const card = `
+          <div class="bg-white rounded-3xl p-6 shadow-soft border border-slate-100 hover:border-primary/20 hover:shadow-md transition-all duration-300 flex flex-col justify-between">
+            <div>
+              <!-- Card Top Heading -->
+              <div class="flex items-center justify-between gap-4 mb-4 pb-3 border-b border-slate-100">
+                <div class="flex items-center gap-1.5">
+                  <span class="px-2 py-0.5 bg-slate-100 rounded-md text-[10px] font-extrabold text-slate-500 tracking-wider">#${b.id.toString().slice(-6)}</span>
+                  ${isAdmin ? `<span class="text-[10px] text-primary font-bold">Admin Simulator View</span>` : ""}
+                </div>
+                <span class="px-2.5 py-1 inline-flex items-center gap-1 text-[11px] font-bold leading-5 rounded-full border ${statusClass}">
+                  <i class="ph-fill ${statusIcon}"></i>
+                  ${b.status}
+                </span>
+              </div>
+
+              <!-- Main Card Body -->
+              <div class="flex flex-col sm:flex-row gap-5 mb-5">
+                <!-- Vehicle Preview -->
+                <div class="w-full sm:w-2/5 aspect-[4/3] rounded-2xl overflow-hidden border border-slate-100 bg-slate-50 shrink-0">
+                  <img src="${carImg}" alt="${b.carName}" class="w-full h-full object-cover">
+                </div>
+
+                <!-- Specs and Notes -->
+                <div class="flex-1 space-y-2">
+                  <div class="flex items-start justify-between gap-2">
+                    <h4 class="text-base font-bold text-navy">${b.carName}</h4>
+                    <span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-semibold">${carType}</span>
+                  </div>
+                  
+                  ${isAdmin ? `
+                    <div class="text-[11px] text-slate-500 font-medium">
+                      Pemesan: <span class="text-slate-800 font-semibold">${b.userName} (${b.userEmail})</span>
+                    </div>
+                  ` : ""}
+
+                  <!-- Details Specs Grid -->
+                  <div class="grid grid-cols-1 gap-1.5 text-[11px] text-slate-600">
+                    <div class="flex items-center gap-1.5">
+                      <i class="ph ph-calendar-blank text-slate-400 text-sm"></i>
+                      <span class="font-semibold text-slate-700">${formattedStart} - ${formattedEnd}</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                      <i class="ph ph-timer text-slate-400 text-sm"></i>
+                      <span>Durasi: <span class="font-bold text-slate-700">${b.duration} Hari</span> (${b.serviceType})</span>
+                    </div>
+                    <div class="flex items-start gap-1.5">
+                      <i class="ph ph-map-pin text-slate-400 text-sm mt-0.5"></i>
+                      <span>Ambil: <span class="font-medium text-slate-700">${b.pickupLocation}</span></span>
+                    </div>
+                    <div class="flex items-start gap-1.5">
+                      <i class="ph ph-map-pin-line text-slate-400 text-sm mt-0.5"></i>
+                      <span>Kembali: <span class="font-medium text-slate-700">${b.dropoffLocation}</span></span>
+                    </div>
+                  </div>
+
+                  <!-- Kelengkapan / Catatan -->
+                  <div class="pt-2 border-t border-dashed border-slate-100">
+                    <span class="text-[10px] font-bold text-slate-400 block mb-0.5 uppercase tracking-wider">Kelengkapan & Catatan:</span>
+                    <p class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100 italic">
+                      ${b.notes ? b.notes : "Tidak ada kelengkapan khusus / catatan tambahan."}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card Bottom (Cost & Actions) -->
+            <div class="pt-4 border-t border-slate-100 flex flex-row items-center justify-between gap-4 mt-auto">
+              <div>
+                <span class="text-[10px] text-slate-400 font-bold block uppercase tracking-wider">Total Biaya</span>
+                <span class="text-lg font-extrabold text-navy">${formatRupiah(b.totalPrice)}</span>
+              </div>
+
+              <div class="flex items-center gap-2">
+                ${adminControls}
+                ${b.status === "Selesai" ? `
+                  <a href="/?car=${encodeURIComponent(b.carName)}#reservasi" class="px-3.5 py-2 bg-primary hover:bg-blue-700 text-white text-[11px] font-bold rounded-xl transition-all shadow-sm hover:shadow text-center flex items-center gap-1.5 cursor-pointer">
+                    <i class="ph ph-arrow-counter-clockwise font-bold"></i>
+                    Pesan Kembali
+                  </a>
+                ` : ""}
+              </div>
+            </div>
+          </div>
+        `;
+        bookingCardsContainer.insertAdjacentHTML("beforeend", card);
+      });
+
+      // Bind simulation approval / rejection event triggers
+      if (isAdmin) {
+        bookingCardsContainer.querySelectorAll("[data-approve-id]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = parseInt(btn.getAttribute("data-approve-id") || "0");
+            updateBookingStatus(id, "Disetujui");
+          });
+        });
+        
+        bookingCardsContainer.querySelectorAll("[data-reject-id]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = parseInt(btn.getAttribute("data-reject-id") || "0");
+            updateBookingStatus(id, "Ditolak");
+          });
+        });
+
+        bookingCardsContainer.querySelectorAll("[data-complete-id]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = parseInt(btn.getAttribute("data-complete-id") || "0");
+            updateBookingStatus(id, "Selesai");
+          });
+        });
+      }
+    };
+
+    const updateBookingStatus = (id: number, status: "Disetujui" | "Ditolak" | "Selesai") => {
+      const bookings = JSON.parse(localStorage.getItem("kgyk_bookings") || "[]");
+      const index = bookings.findIndex((b: any) => b.id === id);
+      if (index !== -1) {
+        bookings[index].status = status;
+        localStorage.setItem("kgyk_bookings", JSON.stringify(bookings));
+        renderBookings();
+        if ((window as any).showToast) {
+          (window as any).showToast(`Pesanan #${id.toString().slice(-6)} berhasil ${status.toLowerCase()}!`, 'success');
+        }
+      }
+    };
+
+    adminToggle?.addEventListener("change", renderBookings);
+
+    const updateUIState = () => {
+      const currentUser = JSON.parse(localStorage.getItem("kgyk_current_user") || "null");
+      if (currentUser) {
+        loggedOutPanel.classList.add("hidden");
+        loggedInPanel.classList.remove("hidden");
+        renderBookings();
+      } else {
+        loggedOutPanel.classList.remove("hidden");
+        loggedInPanel.classList.add("hidden");
+      }
+    };
+
+    window.addEventListener("auth-changed", updateUIState);
+    updateUIState();
+  });
+</script>

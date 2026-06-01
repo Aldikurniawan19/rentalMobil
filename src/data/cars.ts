@@ -68,7 +68,7 @@ export const cars: Car[] = [
     capacity: "7 Penumpang",
     trans: "Matic",
     price: 950000,
-    img: "https://images.unsplash.com/photo-1606016159991-ec0364962cb1?auto=format&fit=crop&w=600&q=80",
+    img: "https://images.unsplash.com/photo-1609521263047-f8f205293f24?auto=format&fit=crop&w=600&q=80",
     status: false,
     category: "suv",
     description: "SUV mewah dengan fitur keamanan canggih dan performa mesin diesel yang sangat bertenaga. Interior premium berbahan kulit memberikan pengalaman berkendara yang mewah dan tak terlupakan.",
