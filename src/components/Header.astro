@@ -138,6 +138,22 @@
   header:not(.scrolled) nav a:hover {
     color: #FFFFFF;
   }
+  
+  /* Active navigation styling */
+  nav a.active {
+    font-weight: 700;
+  }
+  header.scrolled nav a.active {
+    color: #2563EB !important;
+  }
+  header:not(.scrolled) nav a.active {
+    color: #FACC15 !important;
+  }
+  .mobile-link.active {
+    color: #2563EB !important;
+    background-color: #F8FAFC;
+    font-weight: 700;
+  }
 
   /* Profile dropdown button styles */
   #profile-dropdown-btn {
@@ -364,6 +380,60 @@
     mobileLogoutBtn?.addEventListener("click", () => {
       mobileMenu.classList.add("hidden");
       handleLogout();
+    });
+
+    // Intersection Observer for Active Menu Items
+    const sections = document.querySelectorAll("section[id]");
+    const navLinks = document.querySelectorAll("nav a");
+    const mobileNavLinks = document.querySelectorAll(".mobile-link");
+
+    const observerOptions = {
+      root: null,
+      rootMargin: "-25% 0px -55% 0px",
+      threshold: 0
+    };
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute("id");
+          
+          // Desktop active state
+          navLinks.forEach((link) => {
+            if (link.getAttribute("href") === `#${id}`) {
+              link.classList.add("active");
+            } else {
+              link.classList.remove("active");
+            }
+          });
+
+          // Mobile active state
+          mobileNavLinks.forEach((link) => {
+            if (link.getAttribute("href") === `#${id}`) {
+              link.classList.add("active");
+            } else {
+              link.classList.remove("active");
+            }
+          });
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    sections.forEach((section) => observer.observe(section));
+
+    // Scroll fallback for top of the page
+    window.addEventListener("scroll", () => {
+      if (window.scrollY === 0) {
+        navLinks.forEach((link, idx) => {
+          if (idx === 0) link.classList.add("active");
+          else link.classList.remove("active");
+        });
+        mobileNavLinks.forEach((link, idx) => {
+          if (idx === 0) link.classList.add("active");
+          else link.classList.remove("active");
+        });
+      }
     });
   });
 </script>
