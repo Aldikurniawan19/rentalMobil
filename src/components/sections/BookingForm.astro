@@ -415,21 +415,40 @@ import { cars } from '../../data/cars';
     window.addEventListener("auth-changed", updateUIState);
     updateUIState(); // Run initial state check
 
-    // Parse query parameter to pre-select a car
+    // Parse query parameter to pre-select a car and dates
     const urlParams = new URLSearchParams(window.location.search);
     const carParam = urlParams.get("car");
+    const startParam = urlParams.get("start");
+    const endParam = urlParams.get("end");
+
+    let hasParam = false;
+
     if (carParam && formCar) {
       const options = Array.from(formCar.options);
       const match = options.find(opt => opt.value.toLowerCase() === carParam.toLowerCase());
       if (match) {
         formCar.value = match.value;
-        updateEstimates();
-        const reservationSection = document.getElementById("reservasi");
-        if (reservationSection) {
-          setTimeout(() => {
-            reservationSection.scrollIntoView({ behavior: "smooth" });
-          }, 300);
-        }
+        hasParam = true;
+      }
+    }
+
+    if (startParam && formDateStart) {
+      formDateStart.value = startParam;
+      hasParam = true;
+    }
+
+    if (endParam && formDateEnd) {
+      formDateEnd.value = endParam;
+      hasParam = true;
+    }
+
+    if (hasParam) {
+      updateEstimates();
+      const reservationSection = document.getElementById("reservasi");
+      if (reservationSection) {
+        setTimeout(() => {
+          reservationSection.scrollIntoView({ behavior: "smooth" });
+        }, 300);
       }
     }
   });

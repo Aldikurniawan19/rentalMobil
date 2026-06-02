@@ -3,26 +3,19 @@
 <!-- Car Catalog Section -->
 <section id="mobil" class="py-20 bg-white">
   <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-6">
       <div class="max-w-xl" data-aos="fade-right">
         <h4 class="text-primary font-bold tracking-wider uppercase text-sm mb-2">Katalog Armada</h4>
-        <h2 class="text-3xl md:text-4xl font-bold text-navy mb-4">Pilih Mobil Sesuai Kebutuhan Anda</h2>
+        <h2 class="text-3xl md:text-4xl font-bold text-navy mb-0">Pilih Mobil Sesuai Kebutuhan Anda</h2>
       </div>
 
-      <!-- Search Box -->
-      <div class="relative max-w-sm w-full" data-aos="fade-left">
-        <input type="text" id="searchInput" placeholder="Cari nama mobil..." class="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" />
-        <i class="ph ph-magnifying-glass absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 text-xl"></i>
+      <!-- Button Lihat Selengkapnya di Kanan Atas -->
+      <div class="shrink-0" data-aos="fade-left">
+        <a href="/katalog" class="inline-flex items-center gap-2 px-6 py-3.5 bg-primary hover:bg-blue-700 text-white text-sm font-bold rounded-2xl shadow-md hover:shadow-lg transition-all duration-300">
+          <span>Lihat Selengkapnya</span>
+          <i class="ph ph-arrow-right font-bold"></i>
+        </a>
       </div>
-    </div>
-
-    <!-- Filters -->
-    <div class="flex flex-wrap items-center gap-3 mb-10" id="filterContainer" data-aos="fade-up">
-      <button class="filter-btn active px-6 py-2 rounded-full border border-slate-200 text-sm font-semibold transition-all hover:bg-primary hover:text-white hover:border-primary" data-filter="all">Semua</button>
-      <button class="filter-btn px-6 py-2 rounded-full border border-slate-200 text-slate-600 text-sm font-semibold transition-all hover:bg-primary hover:text-white hover:border-primary" data-filter="city car">City Car</button>
-      <button class="filter-btn px-6 py-2 rounded-full border border-slate-200 text-slate-600 text-sm font-semibold transition-all hover:bg-primary hover:text-white hover:border-primary" data-filter="mpv">MPV</button>
-      <button class="filter-btn px-6 py-2 rounded-full border border-slate-200 text-slate-600 text-sm font-semibold transition-all hover:bg-primary hover:text-white hover:border-primary" data-filter="suv">SUV</button>
-      <button class="filter-btn px-6 py-2 rounded-full border border-slate-200 text-slate-600 text-sm font-semibold transition-all hover:bg-primary hover:text-white hover:border-primary" data-filter="van">Van</button>
     </div>
 
     <!-- Car Grid -->
@@ -45,8 +38,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     const carGrid = document.getElementById("carGrid");
     const noCarFound = document.getElementById("noCarFound");
-    const searchInput = document.getElementById("searchInput") as HTMLInputElement | null;
-    const filterBtns = document.querySelectorAll(".filter-btn");
 
     if (!carGrid || !noCarFound) return;
 
@@ -116,7 +107,6 @@
         });
 
         // Re-bind events to dynamically created elements
-        // 1. Detail triggering
         carGrid.querySelectorAll("[data-detail-id]").forEach(el => {
           el.addEventListener("click", () => {
             const id = parseInt(el.getAttribute("data-detail-id") || "0");
@@ -126,7 +116,6 @@
           });
         });
 
-        // 2. Booking button triggering
         carGrid.querySelectorAll("[data-book-car]").forEach(el => {
           el.addEventListener("click", () => {
             const carName = el.getAttribute("data-book-car");
@@ -138,50 +127,8 @@
       }
     };
 
-    // Initial render
-    renderCars(cars);
-
-    // Filter logic
-    filterBtns.forEach((btn) => {
-      btn.addEventListener("click", (e) => {
-        const target = e.currentTarget as HTMLButtonElement;
-
-        // UI Update
-        filterBtns.forEach((b) => b.classList.remove("active", "bg-primary", "text-white"));
-        filterBtns.forEach((b) => b.classList.add("text-slate-600"));
-        target.classList.remove("text-slate-600");
-        target.classList.add("active", "bg-primary", "text-white");
-
-        // Filtering
-        const filterValue = target.getAttribute("data-filter");
-        const searchVal = searchInput ? searchInput.value.toLowerCase() : "";
-
-        let filteredCars = cars;
-        if (filterValue !== "all") {
-          filteredCars = filteredCars.filter((car) => car.category === filterValue);
-        }
-        if (searchVal) {
-          filteredCars = filteredCars.filter((car) => car.name.toLowerCase().includes(searchVal));
-        }
-        renderCars(filteredCars);
-      });
-    });
-
-    // Search logic
-    if (searchInput) {
-      searchInput.addEventListener("input", (e) => {
-        const searchVal = (e.target as HTMLInputElement).value.toLowerCase();
-        const activeFilterBtn = document.querySelector(".filter-btn.active");
-        const activeFilter = activeFilterBtn ? activeFilterBtn.getAttribute("data-filter") : "all";
-
-        let filteredCars = cars;
-        if (activeFilter !== "all") {
-          filteredCars = filteredCars.filter((car) => car.category === activeFilter);
-        }
-        filteredCars = filteredCars.filter((car) => car.name.toLowerCase().includes(searchVal));
-        renderCars(filteredCars);
-      });
-    }
+    // Initial render - only show 3 cars on landing page
+    renderCars(cars.slice(0, 3));
 
     // Global bookCar mapping
     (window as any).bookCar = (carName: string) => {

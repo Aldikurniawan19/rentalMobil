@@ -1,4 +1,7 @@
 ---
+const pathname = new URL(Astro.request.url).pathname;
+const isHome = pathname === "/" || pathname === "";
+const isKatalog = pathname.startsWith("/katalog");
 ---
 <!-- Header & Navbar -->
 <header id="header" class="fixed top-0 left-1/2 -translate-x-1/2 w-full z-[100] transition-all duration-500 bg-transparent border-b border-transparent">
@@ -14,11 +17,11 @@
 
       <!-- Desktop Menu -->
       <nav class="hidden md:flex space-x-8">
-        <a href="#home" class="font-medium hover:text-primary transition-colors">Beranda</a>
-        <a href="#layanan" class="font-medium hover:text-primary transition-colors">Layanan</a>
-        <a href="#mobil" class="font-medium hover:text-primary transition-colors">Mobil</a>
-        <a href="#keunggulan" class="font-medium hover:text-primary transition-colors">Keunggulan</a>
-        <a href="#testimoni" class="font-medium hover:text-primary transition-colors">Testimoni</a>
+        <a href={isHome ? "#home" : "/#home"} class="font-medium hover:text-primary transition-colors">Beranda</a>
+        <a href={isHome ? "#layanan" : "/#layanan"} class="font-medium hover:text-primary transition-colors">Layanan</a>
+        <a href={isHome ? "#mobil" : "/katalog"} class={`font-medium hover:text-primary transition-colors ${isKatalog ? 'active' : ''}`}>Mobil</a>
+        <a href={isHome ? "#keunggulan" : "/#keunggulan"} class="font-medium hover:text-primary transition-colors">Keunggulan</a>
+        <a href={isHome ? "#testimoni" : "/#testimoni"} class="font-medium hover:text-primary transition-colors">Testimoni</a>
       </nav>
 
       <!-- CTA & Mobile Toggle -->
@@ -87,11 +90,11 @@
   <!-- Mobile Menu Panel -->
   <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-100 absolute w-full left-0 top-full shadow-lg transition-all duration-300">
     <div class="px-4 pt-2 pb-6 space-y-1">
-      <a href="#home" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link">Beranda</a>
-      <a href="#layanan" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link">Layanan</a>
-      <a href="#mobil" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link">Mobil</a>
-      <a href="#keunggulan" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link">Keunggulan</a>
-      <a href="#testimoni" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link">Testimoni</a>
+      <a href={isHome ? "#home" : "/#home"} class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link">Beranda</a>
+      <a href={isHome ? "#layanan" : "/#layanan"} class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link">Layanan</a>
+      <a href={isHome ? "#mobil" : "/katalog"} class={`block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link ${isKatalog ? 'active' : ''}`}>Mobil</a>
+      <a href={isHome ? "#keunggulan" : "/#keunggulan"} class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link">Keunggulan</a>
+      <a href={isHome ? "#testimoni" : "/#testimoni"} class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link">Testimoni</a>
       
       <!-- Mobile Auth Buttons -->
       <div id="mobile-auth-guest" class="pt-4 border-t border-slate-100 flex flex-col gap-2 px-3">
@@ -436,7 +439,7 @@
 
     // Scroll fallback for top of the page
     window.addEventListener("scroll", () => {
-      if (window.scrollY === 0) {
+      if (window.scrollY === 0 && (window.location.pathname === "/" || window.location.pathname === "")) {
         navLinks.forEach((link, idx) => {
           if (idx === 0) link.classList.add("active");
           else link.classList.remove("active");
