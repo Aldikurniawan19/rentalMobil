@@ -372,14 +372,14 @@ const description = "Temukan berbagai pilihan armada mobil terbaik dan terawat d
 
     if (searchInput) {
       searchInput.addEventListener("input", () => {
-        const hasDates = checkStartDate && checkEndDate && checkStartDate.value && checkEndDate.value;
+        const hasDates = !!(checkStartDate && checkEndDate && checkStartDate.value && checkEndDate.value);
         filterAndSort(hasDates);
       });
     }
 
     if (sortSelect) {
       sortSelect.addEventListener("change", () => {
-        const hasDates = checkStartDate && checkEndDate && checkStartDate.value && checkEndDate.value;
+        const hasDates = !!(checkStartDate && checkEndDate && checkStartDate.value && checkEndDate.value);
         filterAndSort(hasDates);
       });
     }
