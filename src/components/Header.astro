@@ -229,6 +229,15 @@ const isKatalog = pathname.startsWith("/katalog");
     const navbarContainer = document.getElementById("navbar-container");
     const headerContainer = document.getElementById("header-container");
 
+    const closeMobileMenu = () => {
+      mobileMenu.classList.add("hidden");
+      const icon = mobileBtn.querySelector("i");
+      if (icon) {
+        icon.classList.remove("ph-x");
+        icon.classList.add("ph-list");
+      }
+    };
+
     // Helper to toggle header state on scroll
     const checkScroll = () => {
       if (window.scrollY > 50) {
@@ -267,7 +276,8 @@ const isKatalog = pathname.startsWith("/katalog");
     window.addEventListener("scroll", checkScroll);
     checkScroll(); // Run initially to check position
 
-    mobileBtn.addEventListener("click", () => {
+    mobileBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
       mobileMenu.classList.toggle("hidden");
       const icon = mobileBtn.querySelector("i");
       if (!icon) return;
@@ -280,19 +290,28 @@ const isKatalog = pathname.startsWith("/katalog");
       }
     });
 
-    mobileLinks.forEach((link) => {
-      link.addEventListener("click", () => {
-        mobileMenu.classList.add("hidden");
-        const icon = mobileBtn.querySelector("i");
-        if (icon) {
-          icon.classList.replace("ph-x", "ph-list");
-        }
-      });
+    // Close menu when clicking links/buttons inside mobile menu
+    mobileMenu.addEventListener("click", (e) => {
+      const target = e.target as HTMLElement;
+      if (target.closest("a, button")) {
+        closeMobileMenu();
+      }
+    });
+
+    // Close mobile menu when clicking outside of the mobile menu and the menu button
+    document.addEventListener("click", (e) => {
+      const target = e.target as HTMLElement;
+      if (!mobileMenu.classList.contains("hidden") && 
+          !mobileBtn.contains(target) && 
+          !mobileMenu.contains(target)) {
+        closeMobileMenu();
+      }
     });
 
     if (logoContainer) {
       logoContainer.addEventListener("click", () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
+        closeMobileMenu();
       });
     }
 
@@ -345,12 +364,12 @@ const isKatalog = pathname.startsWith("/katalog");
     });
 
     mobileLoginBtn?.addEventListener("click", () => {
-      mobileMenu.classList.add("hidden");
+      closeMobileMenu();
       if ((window as any).openLoginModal) (window as any).openLoginModal();
     });
 
     mobileRegisterBtn?.addEventListener("click", () => {
-      mobileMenu.classList.add("hidden");
+      closeMobileMenu();
       if ((window as any).openRegisterModal) (window as any).openRegisterModal();
     });
 
@@ -404,7 +423,7 @@ const isKatalog = pathname.startsWith("/katalog");
     });
 
     mobileLogoutBtn?.addEventListener("click", () => {
-      mobileMenu.classList.add("hidden");
+      closeMobileMenu();
       handleLogout();
     });
 
