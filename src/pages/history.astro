@@ -122,10 +122,13 @@ import Footer from '../components/Footer.astro';
 
       printWindow.document.write(`
         <!DOCTYPE html>
-        <html><head><title>Struk ${b.bookingCode || ''}</title>
+        <html><head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Struk ${b.bookingCode || ''}</title>
         <style>
           * { box-sizing: border-box; margin: 0; padding: 0; }
-          body { font-family: 'Segoe UI', Arial, sans-serif; padding: 20px; max-width: 400px; margin: 0 auto; color: #334155; font-size: 11px; }
+          body { font-family: 'Segoe UI', Arial, sans-serif; padding: 16px; max-width: 400px; width: 100%; margin: 0 auto; color: #334155; font-size: 11px; }
           .header { text-align: center; border-bottom: 2px dashed #e2e8f0; padding-bottom: 12px; margin-bottom: 12px; }
           .header h2 { font-size: 14px; font-weight: 800; color: #0f172a; }
           .header p { font-size: 8px; color: #94a3b8; }

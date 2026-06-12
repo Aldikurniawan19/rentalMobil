@@ -69,7 +69,7 @@ export default function ReceiptModal({ booking, type, pricePerDay, onClose }: Re
         </div>
 
         {/* Printable Receipt Content */}
-        <div id="receipt-print-area" className="p-6 overflow-y-auto print:overflow-visible print:p-4">
+        <div id="receipt-print-area" className="p-4 sm:p-6 overflow-y-auto print:overflow-visible print:p-4">
           {/* Receipt Header */}
           <div className="text-center border-b-2 border-dashed border-slate-200 pb-4 mb-4">
             <div className="flex items-center justify-center gap-2 mb-1">
