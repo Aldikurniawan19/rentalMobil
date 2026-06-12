@@ -351,26 +351,54 @@ import Footer from '../components/Footer.astro';
       const filename = `Struk-${activeBooking.bookingCode || "Booking"}.png`;
 
       if ((window as any).html2canvas) {
-        (window as any).html2canvas(historyReceiptModalPrintArea, {
-          scale: 2,
-          useCORS: true,
-          backgroundColor: '#ffffff'
-        }).then((canvas: HTMLCanvasElement) => {
-          canvas.toBlob(function(blob) {
-            if (!blob) return;
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.download = filename;
-            link.href = url;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            setTimeout(() => URL.revokeObjectURL(url), 100);
-          }, 'image/png');
-        }).catch((err: any) => {
-          console.error(err);
-          alert("Gagal mengunduh gambar.");
-        });
+        // Create an off-screen clone container to isolate rendering from parent transforms/transitions
+        const clone = historyReceiptModalPrintArea.cloneNode(true) as HTMLElement;
+        clone.style.position = "absolute";
+        clone.style.left = "-9999px";
+        clone.style.top = "0";
+        clone.style.width = "375px"; // Fixed standard receipt width
+        clone.style.height = "auto";
+        clone.style.background = "#ffffff";
+        clone.style.padding = "24px";
+        clone.style.boxSizing = "border-box";
+        
+        document.body.appendChild(clone);
+
+        // Wait a tiny bit for the clone to mount and compute styles
+        setTimeout(() => {
+          (window as any).html2canvas(clone, {
+            scale: 2,
+            useCORS: true,
+            backgroundColor: '#ffffff',
+            logging: false,
+            width: 375
+          }).then((canvas: HTMLCanvasElement) => {
+            canvas.toBlob(function(blob) {
+              // Clean up clone
+              document.body.removeChild(clone);
+              
+              if (!blob) {
+                alert("Gagal memproses gambar struk.");
+                return;
+              }
+              const url = URL.createObjectURL(blob);
+              const link = document.createElement('a');
+              link.download = filename;
+              link.href = url;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              setTimeout(() => URL.revokeObjectURL(url), 100);
+            }, 'image/png');
+          }).catch((err: any) => {
+            console.error("html2canvas error:", err);
+            // Clean up clone
+            if (document.body.contains(clone)) {
+              document.body.removeChild(clone);
+            }
+            alert("Gagal mengunduh gambar.");
+          });
+        }, 50);
       } else {
         alert("Gagal memuat modul gambar. Silakan gunakan tombol Cetak.");
       }
