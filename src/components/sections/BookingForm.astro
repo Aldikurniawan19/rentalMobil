@@ -1,32 +1,50 @@
 ---
-import { cars } from '../../data/cars';
+import { cars } from "../../data/cars";
 ---
+
 <!-- Reservasi & Kontak Section -->
-<section id="reservasi" class="py-20 bg-lightbg relative border-t border-slate-100">
+<section
+  id="reservasi"
+  class="py-20 bg-lightbg relative border-t border-slate-100"
+>
   <div class="container mx-auto px-4 sm:px-6 lg:px-8">
     <div class="bg-white rounded-3xl shadow-xl overflow-hidden">
       <div class="flex flex-col lg:flex-row">
-        
         <!-- Info Kontak Panel -->
-        <div class="lg:w-2/5 bg-navy text-white p-10 lg:p-12 relative overflow-hidden flex flex-col justify-between">
-          <div class="absolute top-0 right-0 w-64 h-64 bg-primary rounded-full filter blur-3xl opacity-20 -translate-y-1/2 translate-x-1/3"></div>
+        <div
+          class="lg:w-2/5 bg-navy text-white p-10 lg:p-12 relative overflow-hidden flex flex-col justify-between"
+        >
+          <div
+            class="absolute top-0 right-0 w-64 h-64 bg-primary rounded-full filter blur-3xl opacity-20 -translate-y-1/2 translate-x-1/3"
+          >
+          </div>
 
           <div class="relative z-10">
             <h3 class="text-3xl font-bold mb-2">Hubungi Kami</h3>
-            <p class="text-slate-300 mb-10">Kami siap melayani kebutuhan transportasi Anda 24 jam setiap harinya.</p>
+            <p class="text-slate-300 mb-10">
+              Kami siap melayani kebutuhan transportasi Anda 24 jam setiap
+              harinya.
+            </p>
 
             <div class="space-y-6">
               <div class="flex items-start gap-4">
-                <div class="w-12 h-12 bg-white/10 rounded-full flex flex-shrink-0 items-center justify-center text-accent text-xl">
+                <div
+                  class="w-12 h-12 bg-white/10 rounded-full flex flex-shrink-0 items-center justify-center text-accent text-xl"
+                >
                   <i class="ph-fill ph-map-pin"></i>
                 </div>
                 <div>
                   <h4 class="font-semibold mb-1">Alamat Kantor</h4>
-                  <p class="text-slate-300 text-sm leading-relaxed">Jl. Pandega Marga, Manggung, Caturtunggal, Kec. Depok, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55281</p>
+                  <p class="text-slate-300 text-sm leading-relaxed">
+                    Jl. Pandega Marga, Manggung, Caturtunggal, Kec. Depok,
+                    Kabupaten Sleman, Daerah Istimewa Yogyakarta 55281
+                  </p>
                 </div>
               </div>
               <div class="flex items-start gap-4">
-                <div class="w-12 h-12 bg-white/10 rounded-full flex flex-shrink-0 items-center justify-center text-accent text-xl">
+                <div
+                  class="w-12 h-12 bg-white/10 rounded-full flex flex-shrink-0 items-center justify-center text-accent text-xl"
+                >
                   <i class="ph-fill ph-phone"></i>
                 </div>
                 <div>
@@ -35,7 +53,9 @@ import { cars } from '../../data/cars';
                 </div>
               </div>
               <div class="flex items-start gap-4">
-                <div class="w-12 h-12 bg-white/10 rounded-full flex flex-shrink-0 items-center justify-center text-accent text-xl">
+                <div
+                  class="w-12 h-12 bg-white/10 rounded-full flex flex-shrink-0 items-center justify-center text-accent text-xl"
+                >
                   <i class="ph-fill ph-envelope-simple"></i>
                 </div>
                 <div>
@@ -47,13 +67,22 @@ import { cars } from '../../data/cars';
           </div>
 
           <div class="mt-12 flex gap-4 relative z-10">
-            <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary rounded-full flex items-center justify-center text-white transition-colors duration-300">
+            <a
+              href="#"
+              class="w-10 h-10 bg-white/10 hover:bg-primary rounded-full flex items-center justify-center text-white transition-colors duration-300"
+            >
               <i class="ph-fill ph-instagram-logo"></i>
             </a>
-            <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary rounded-full flex items-center justify-center text-white transition-colors duration-300">
+            <a
+              href="#"
+              class="w-10 h-10 bg-white/10 hover:bg-primary rounded-full flex items-center justify-center text-white transition-colors duration-300"
+            >
               <i class="ph-fill ph-facebook-logo"></i>
             </a>
-            <a href="#" class="w-10 h-10 bg-white/10 hover:bg-primary rounded-full flex items-center justify-center text-white transition-colors duration-300">
+            <a
+              href="#"
+              class="w-10 h-10 bg-white/10 hover:bg-primary rounded-full flex items-center justify-center text-white transition-colors duration-300"
+            >
               <i class="ph-fill ph-twitter-logo"></i>
             </a>
           </div>
@@ -61,19 +90,34 @@ import { cars } from '../../data/cars';
 
         <!-- Dynamic Form Panel -->
         <div class="lg:w-3/5 p-10 lg:p-12 relative flex items-center">
-          
           <!-- State 1: Guest (Logged Out) -->
-          <div id="booking-logged-out" class="w-full text-center py-10 flex flex-col items-center">
-            <div class="w-20 h-20 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mb-6 border border-slate-200">
+          <div
+            id="booking-logged-out"
+            class="w-full text-center py-10 flex flex-col items-center"
+          >
+            <div
+              class="w-20 h-20 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mb-6 border border-slate-200"
+            >
               <i class="ph ph-lock text-4xl"></i>
             </div>
-            <h3 class="text-2xl font-bold text-navy mb-2">Pemesanan Online Terkunci</h3>
-            <p class="text-slate-500 text-sm max-w-sm mb-8">Untuk menjamin kenyamanan bertransaksi, silakan masuk ke akun Anda atau mendaftar terlebih dahulu.</p>
+            <h3 class="text-2xl font-bold text-navy mb-2">
+              Pemesanan Online Terkunci
+            </h3>
+            <p class="text-slate-500 text-sm max-w-sm mb-8">
+              Untuk menjamin kenyamanan bertransaksi, silakan masuk ke akun Anda
+              atau mendaftar terlebih dahulu.
+            </p>
             <div class="flex gap-4">
-              <button id="btn-form-login" class="px-6 py-3 bg-primary hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition-all shadow-md cursor-pointer">
+              <button
+                id="btn-form-login"
+                class="px-6 py-3 bg-primary hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition-all shadow-md cursor-pointer"
+              >
                 Masuk ke Akun
               </button>
-              <button id="btn-form-register" class="px-6 py-3 border border-slate-200 text-slate-700 hover:bg-slate-50 font-bold rounded-xl text-sm transition-all cursor-pointer">
+              <button
+                id="btn-form-register"
+                class="px-6 py-3 border border-slate-200 text-slate-700 hover:bg-slate-50 font-bold rounded-xl text-sm transition-all cursor-pointer"
+              >
                 Daftar Baru
               </button>
             </div>
@@ -81,13 +125,16 @@ import { cars } from '../../data/cars';
 
           <!-- State 2: Member (Logged In) -->
           <div id="booking-logged-in" class="hidden w-full">
-            <h3 class="text-2xl font-bold text-navy mb-6">Form Pemesanan Online</h3>
+            <h3 class="text-2xl font-bold text-navy mb-6">
+              Form Pemesanan Online
+            </h3>
             <form id="contactForm" class="space-y-6">
-              
               <!-- User Info Row (read-only) -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label class="block text-sm font-semibold text-slate-700 mb-2">Nama Pelanggan</label>
+                  <label class="block text-sm font-semibold text-slate-700 mb-2"
+                    >Nama Pelanggan</label
+                  >
                   <input
                     type="text"
                     id="formName"
@@ -96,12 +143,22 @@ import { cars } from '../../data/cars';
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-semibold text-slate-700 mb-2">Pilihan Mobil</label>
-                  <select id="formCar" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-slate-50 focus:bg-white text-slate-700 text-sm">
+                  <label class="block text-sm font-semibold text-slate-700 mb-2"
+                    >Pilihan Mobil</label
+                  >
+                  <select
+                    id="formCar"
+                    required
+                    class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-slate-50 focus:bg-white text-slate-700 text-sm"
+                  >
                     <option value="">Pilih Armada Mobil</option>
-                    {cars.map((car) => (
-                      <option value={car.name}>{car.name} ({car.type})</option>
-                    ))}
+                    {
+                      cars.map((car) => (
+                        <option value={car.name}>
+                          {car.name} ({car.type})
+                        </option>
+                      ))
+                    }
                   </select>
                 </div>
               </div>
@@ -109,7 +166,9 @@ import { cars } from '../../data/cars';
               <!-- Date Picker Row -->
               <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
-                  <label class="block text-sm font-semibold text-slate-700 mb-2">Tanggal Mulai Sewa</label>
+                  <label class="block text-sm font-semibold text-slate-700 mb-2"
+                    >Tanggal Mulai Sewa</label
+                  >
                   <input
                     type="date"
                     id="formDateStart"
@@ -118,7 +177,9 @@ import { cars } from '../../data/cars';
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-semibold text-slate-700 mb-2">Tanggal Selesai Sewa</label>
+                  <label class="block text-sm font-semibold text-slate-700 mb-2"
+                    >Tanggal Selesai Sewa</label
+                  >
                   <input
                     type="date"
                     id="formDateEnd"
@@ -127,7 +188,9 @@ import { cars } from '../../data/cars';
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-semibold text-slate-700 mb-2">Durasi Sewa (Hari)</label>
+                  <label class="block text-sm font-semibold text-slate-700 mb-2"
+                    >Durasi Sewa (Hari)</label
+                  >
                   <input
                     type="number"
                     id="formDuration"
@@ -138,70 +201,60 @@ import { cars } from '../../data/cars';
                 </div>
               </div>
 
-              <!-- Service Type and Locations -->
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                  <label class="block text-sm font-semibold text-slate-700 mb-2">Jenis Layanan</label>
-                  <select id="formService" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-slate-50 focus:bg-white text-slate-700 text-sm">
-                    <option value="Lepas kunci">Lepas Kunci</option>
-                    <option value="Dengan supir">Dengan Supir</option>
-                    <option value="Antar kendaraan ke lokasi">Antar Kendaraan</option>
-                    <option value="Ambil di kantor rental">Ambil di Kantor</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-sm font-semibold text-slate-700 mb-2">Lokasi Pengambilan</label>
-                  <input
-                    type="text"
-                    id="formPickup"
-                    required
-                    class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-slate-50 focus:bg-white text-slate-800 text-sm"
-                    placeholder="Bandara / Rumah / Kantor"
-                  />
-                </div>
-                <div>
-                  <label class="block text-sm font-semibold text-slate-700 mb-2">Lokasi Pengembalian</label>
-                  <input
-                    type="text"
-                    id="formDropoff"
-                    required
-                    class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-slate-50 focus:bg-white text-slate-800 text-sm"
-                    placeholder="Bandara / Rumah / Kantor"
-                  />
-                </div>
-              </div>
-
               <!-- Notes & File Upload -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label class="block text-sm font-semibold text-slate-700 mb-2">Pesan Tambahan</label>
+                  <label class="block text-sm font-semibold text-slate-700 mb-2"
+                    >Pesan Tambahan</label
+                  >
                   <textarea
                     id="formMessage"
                     rows="3"
                     class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-slate-50 focus:bg-white resize-none text-slate-800 text-sm"
-                    placeholder="Catatan tambahan untuk admin..."
-                  ></textarea>
+                    placeholder="Catatan tambahan untuk admin..."></textarea>
                 </div>
                 <div>
-                  <label class="block text-sm font-semibold text-slate-700 mb-2">Upload Identitas (KTP / SIM A)</label>
-                  <div class="border-2 border-dashed border-slate-200 rounded-xl p-4 text-center cursor-pointer hover:border-primary hover:bg-slate-50/50 transition-colors">
+                  <label class="block text-sm font-semibold text-slate-700 mb-2"
+                    >Upload Identitas (KTP / SIM A)</label
+                  >
+                  <div
+                    class="border-2 border-dashed border-slate-200 rounded-xl p-4 text-center cursor-pointer hover:border-primary hover:bg-slate-50/50 transition-colors"
+                  >
                     <i class="ph ph-upload text-2xl text-slate-400 mb-1"></i>
-                    <p class="text-xs text-slate-500 font-semibold">Klik atau tarik file ke area ini</p>
-                    <p class="text-[10px] text-slate-400">PDF, PNG, JPG (Maks. 5MB)</p>
+                    <p class="text-xs text-slate-500 font-semibold">
+                      Klik atau tarik file ke area ini
+                    </p>
+                    <p class="text-[10px] text-slate-400">
+                      PDF, PNG, JPG (Maks. 5MB)
+                    </p>
                     <input type="file" id="formDoc" class="hidden" />
                   </div>
                 </div>
               </div>
 
               <!-- Live Cost Estimate -->
-              <div id="price-estimate-section" class="hidden bg-blue-50 border border-blue-100 rounded-2xl p-5 flex justify-between items-center animate-fade-in">
+              <div
+                id="price-estimate-section"
+                class="hidden bg-blue-50 border border-blue-100 rounded-2xl p-5 flex justify-between items-center animate-fade-in"
+              >
                 <div>
-                  <span class="text-xs font-semibold text-primary uppercase tracking-wider">Estimasi Biaya Sewa</span>
-                  <p class="text-xs text-slate-500">Mulai dari <span id="estimate-price-day" class="font-bold text-slate-700"></span> /hari</p>
+                  <span
+                    class="text-xs font-semibold text-primary uppercase tracking-wider"
+                    >Estimasi Biaya Sewa</span
+                  >
+                  <p class="text-xs text-slate-500">
+                    Mulai dari <span
+                      id="estimate-price-day"
+                      class="font-bold text-slate-700"></span> /hari
+                  </p>
                 </div>
                 <div class="text-right">
                   <span class="text-xs text-slate-500">Total Biaya:</span>
-                  <p id="estimate-price-total" class="text-2xl font-extrabold text-navy"></p>
+                  <p
+                    id="estimate-price-total"
+                    class="text-2xl font-extrabold text-navy"
+                  >
+                  </p>
                 </div>
               </div>
 
@@ -214,41 +267,46 @@ import { cars } from '../../data/cars';
               </button>
             </form>
           </div>
-
         </div>
       </div>
     </div>
-
-
-
   </div>
 </section>
 
 <script>
-  import { cars } from '../../data/cars';
+  import { cars } from "../../data/cars";
 
   document.addEventListener("DOMContentLoaded", () => {
     const loggedOutState = document.getElementById("booking-logged-out");
     const loggedInState = document.getElementById("booking-logged-in");
-    
-    const form = document.getElementById("contactForm") as HTMLFormElement | null;
-    const formName = document.getElementById("formName") as HTMLInputElement | null;
-    const formCar = document.getElementById("formCar") as HTMLSelectElement | null;
-    const formDateStart = document.getElementById("formDateStart") as HTMLInputElement | null;
-    const formDateEnd = document.getElementById("formDateEnd") as HTMLInputElement | null;
-    const formDuration = document.getElementById("formDuration") as HTMLInputElement | null;
-    const formService = document.getElementById("formService") as HTMLSelectElement | null;
-    const formPickup = document.getElementById("formPickup") as HTMLInputElement | null;
-    const formDropoff = document.getElementById("formDropoff") as HTMLInputElement | null;
-    const formMessage = document.getElementById("formMessage") as HTMLTextAreaElement | null;
-    
+
+    const form = document.getElementById(
+      "contactForm",
+    ) as HTMLFormElement | null;
+    const formName = document.getElementById(
+      "formName",
+    ) as HTMLInputElement | null;
+    const formCar = document.getElementById(
+      "formCar",
+    ) as HTMLSelectElement | null;
+    const formDateStart = document.getElementById(
+      "formDateStart",
+    ) as HTMLInputElement | null;
+    const formDateEnd = document.getElementById(
+      "formDateEnd",
+    ) as HTMLInputElement | null;
+    const formDuration = document.getElementById(
+      "formDuration",
+    ) as HTMLInputElement | null;
+    const formMessage = document.getElementById(
+      "formMessage",
+    ) as HTMLTextAreaElement | null;
+
     // Estimates
     const pricePerDayContainer = document.getElementById("estimate-price-day");
     const totalPriceContainer = document.getElementById("estimate-price-total");
     const estimateSection = document.getElementById("price-estimate-section");
 
-
-    
     const btnFormLogin = document.getElementById("btn-form-login");
     const btnFormRegister = document.getElementById("btn-form-register");
 
@@ -257,21 +315,35 @@ import { cars } from '../../data/cars';
     btnFormLogin?.addEventListener("click", () => {
       if ((window as any).openLoginModal) (window as any).openLoginModal();
     });
-    
+
     btnFormRegister?.addEventListener("click", () => {
-      if ((window as any).openRegisterModal) (window as any).openRegisterModal();
+      if ((window as any).openRegisterModal)
+        (window as any).openRegisterModal();
     });
 
     const formatRupiah = (number: number) => {
-      return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(number);
+      return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0,
+      }).format(number);
     };
 
     // Calculate dates duration and estimate total cost
     const updateEstimates = () => {
-      if (!formCar || !formDateStart || !formDateEnd || !formDuration || !totalPriceContainer || !pricePerDayContainer || !estimateSection) return;
+      if (
+        !formCar ||
+        !formDateStart ||
+        !formDateEnd ||
+        !formDuration ||
+        !totalPriceContainer ||
+        !pricePerDayContainer ||
+        !estimateSection
+      )
+        return;
 
       const selectedCarName = formCar.value;
-      const car = cars.find(c => c.name === selectedCarName);
+      const car = cars.find((c) => c.name === selectedCarName);
 
       if (!car || !formDateStart.value || !formDateEnd.value) {
         estimateSection.classList.add("hidden");
@@ -302,26 +374,29 @@ import { cars } from '../../data/cars';
     formDateStart?.addEventListener("change", updateEstimates);
     formDateEnd?.addEventListener("change", updateEstimates);
 
-
-
     // Form submit validation & conflict checking
     form?.addEventListener("submit", (e) => {
       e.preventDefault();
 
-      const currentUser = JSON.parse(localStorage.getItem("kgyk_current_user") || "null");
+      const currentUser = JSON.parse(
+        localStorage.getItem("kgyk_current_user") || "null",
+      );
       if (!currentUser) {
         if ((window as any).showToast) {
-          (window as any).showToast("Silakan login terlebih dahulu untuk melakukan pemesanan.", "error");
+          (window as any).showToast(
+            "Silakan login terlebih dahulu untuk melakukan pemesanan.",
+            "error",
+          );
         } else {
           alert("Silakan login terlebih dahulu untuk melakukan pemesanan.");
         }
         return;
       }
 
-      if (!formCar || !formDateStart || !formDateEnd || !formService || !formPickup || !formDropoff) return;
+      if (!formCar || !formDateStart || !formDateEnd) return;
 
       const selectedCarName = formCar.value;
-      const car = cars.find(c => c.name === selectedCarName);
+      const car = cars.find((c) => c.name === selectedCarName);
       if (!car) {
         if ((window as any).showToast) {
           (window as any).showToast("Silakan pilih kendaraan.", "error");
@@ -338,7 +413,10 @@ import { cars } from '../../data/cars';
 
       if (end < start) {
         if ((window as any).showToast) {
-          (window as any).showToast("Tanggal selesai tidak boleh sebelum tanggal mulai.", "error");
+          (window as any).showToast(
+            "Tanggal selesai tidak boleh sebelum tanggal mulai.",
+            "error",
+          );
         } else {
           alert("Tanggal selesai tidak boleh sebelum tanggal mulai.");
         }
@@ -349,29 +427,36 @@ import { cars } from '../../data/cars';
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
       // Conflict validation check
-      const bookings = JSON.parse(localStorage.getItem("kgyk_bookings") || "[]");
+      const bookings = JSON.parse(
+        localStorage.getItem("kgyk_bookings") || "[]",
+      );
       const isConflicted = bookings.some((b: any) => {
         if (b.carName === selectedCarName && b.status !== "Ditolak") {
           const existingStart = new Date(b.startDate);
           const existingEnd = new Date(b.endDate);
           // Overlap detection
-          return (start <= existingEnd && end >= existingStart);
+          return start <= existingEnd && end >= existingStart;
         }
         return false;
       });
 
       if (isConflicted) {
         if ((window as any).showToast) {
-          (window as any).showToast(`Maaf, mobil ${selectedCarName} tidak tersedia pada tanggal tersebut.`, "error");
+          (window as any).showToast(
+            `Maaf, mobil ${selectedCarName} tidak tersedia pada tanggal tersebut.`,
+            "error",
+          );
         } else {
-          alert(`Maaf, mobil ${selectedCarName} tidak tersedia pada tanggal tersebut karena sudah di-booking oleh penyewa lain. Silakan pilih tanggal atau jenis kendaraan lain.`);
+          alert(
+            `Maaf, mobil ${selectedCarName} tidak tersedia pada tanggal tersebut karena sudah di-booking oleh penyewa lain. Silakan pilih tanggal atau jenis kendaraan lain.`,
+          );
         }
         return;
       }
 
       // Generate booking code
-      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-      let bookingCode = 'KGYK-';
+      const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+      let bookingCode = "KGYK-";
       for (let i = 0; i < 6; i++) {
         bookingCode += chars.charAt(Math.floor(Math.random() * chars.length));
       }
@@ -388,9 +473,9 @@ import { cars } from '../../data/cars';
         startDate: startDateStr,
         endDate: endDateStr,
         duration: diffDays,
-        serviceType: formService.value,
-        pickupLocation: formPickup.value.trim(),
-        dropoffLocation: formDropoff.value.trim(),
+        serviceType: "Sewa Mobil",
+        pickupLocation: "-",
+        dropoffLocation: "-",
         notes: formMessage ? formMessage.value.trim() : "",
         totalPrice: totalPrice,
         status: "Menunggu Verifikasi",
@@ -400,7 +485,7 @@ import { cars } from '../../data/cars';
         returnedAt: null,
         lateFeeHours: 0,
         lateFee: 0,
-        grandTotal: totalPrice
+        grandTotal: totalPrice,
       };
 
       bookings.push(newBooking);
@@ -412,13 +497,47 @@ import { cars } from '../../data/cars';
       // Trigger success event
       window.dispatchEvent(new CustomEvent("booking-success"));
 
+      // Redirect to WhatsApp
+      const waNumber = "62881023331644";
+      const formatDateIndo = (dateStr: string) => {
+        return new Date(dateStr).toLocaleDateString("id-ID", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
+      };
+
+      const waMessage = `*KGYK RENTAL MOBIL YOGYAKARTA*
+_Pemesanan Kendaraan Online_
+--------------------------------------------------
+
+*DATA PENYEWA*
+• Nama: ${currentUser.fullName}
+• Email: ${currentUser.email}
+
+*DETAIL KENDARAAN*
+• Mobil: ${newBooking.carName}
+• Periode: ${formatDateIndo(newBooking.startDate)} s/d ${formatDateIndo(newBooking.endDate)}
+• Durasi: ${newBooking.duration} Hari
+
+*RINCIAN BIAYA*
+• Total Estimasi: ${formatRupiah(newBooking.totalPrice)}
+• Kode Booking: *${newBooking.bookingCode}*
+
+--------------------------------------------------`;
+
+      const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(waMessage)}`;
+      window.open(waUrl, "_blank");
+
       // Reset
       form.reset();
       updateEstimates();
     });
 
     const updateUIState = () => {
-      const currentUser = JSON.parse(localStorage.getItem("kgyk_current_user") || "null");
+      const currentUser = JSON.parse(
+        localStorage.getItem("kgyk_current_user") || "null",
+      );
       if (currentUser) {
         loggedOutState.classList.add("hidden");
         loggedInState.classList.remove("hidden");
@@ -444,7 +563,9 @@ import { cars } from '../../data/cars';
 
     if (carParam && formCar) {
       const options = Array.from(formCar.options);
-      const match = options.find(opt => opt.value.toLowerCase() === carParam.toLowerCase());
+      const match = options.find(
+        (opt) => opt.value.toLowerCase() === carParam.toLowerCase(),
+      );
       if (match) {
         formCar.value = match.value;
         hasParam = true;

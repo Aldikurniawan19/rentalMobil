@@ -192,7 +192,28 @@ import Footer from '../components/Footer.astro';
             <p>Keterlambatan pengembalian melewati jam 16:00 WIB pada tanggal akhir sewa dikenakan denda 10% tarif harian per jam. Lebih dari 5 jam = 1 hari penuh.</p>
             <p style="margin-top:6px;font-size:6px;color:#cbd5e1">Dicetak pada: ${new Date().toLocaleString('id-ID')} • KGYK Rental Mobil Yogyakarta</p>
           </div>
-          <button class="btn-print no-print" onclick="window.print()">🖨️ Cetak Struk</button>
+          <div id="receiptControls" style="display: flex; gap: 10px; margin-top: 16px;" class="no-print">
+            <button class="btn-print" style="margin-top: 0; flex: 1; width: auto;" onclick="window.print()">🖨️ Cetak</button>
+            <button class="btn-print" style="margin-top: 0; flex: 1; width: auto; background: #059669;" onclick="downloadPDF()">📥 Unduh PDF</button>
+          </div>
+          <` + `script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></` + `script>
+          <` + `script>
+            function downloadPDF() {
+              const element = document.body;
+              const opt = {
+                margin:       10,
+                filename:     'Struk-${b.bookingCode || "Booking"}.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+              };
+              const controls = document.getElementById('receiptControls');
+              if (controls) controls.style.display = 'none';
+              html2pdf().from(element).set(opt).save().then(() => {
+                if (controls) controls.style.display = 'flex';
+              });
+            }
+          </` + `script>
         </body></html>
       `);
       printWindow.document.close();

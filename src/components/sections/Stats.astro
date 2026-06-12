@@ -9,7 +9,7 @@ import { cars } from '../../data/cars';
       Cek Ketersediaan Mobil
     </h3>
     
-    <form id="availabilityForm" class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+    <form id="availabilityForm" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
       <!-- Date Start -->
       <div>
         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Mulai Sewa</label>
@@ -31,12 +31,6 @@ import { cars } from '../../data/cars';
             <option value={c.name}>{c.name}</option>
           ))}
         </select>
-      </div>
-
-      <!-- Pickup Location -->
-      <div>
-        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Lokasi Pengambilan</label>
-        <input type="text" id="checkPickup" required placeholder="Contoh: Bandara" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-slate-800 text-sm" />
       </div>
 
       <!-- Submit Button -->
@@ -62,7 +56,6 @@ import { cars } from '../../data/cars';
     const dateStart = document.getElementById("checkDateStart") as HTMLInputElement | null;
     const dateEnd = document.getElementById("checkDateEnd") as HTMLInputElement | null;
     const carSelect = document.getElementById("checkCar") as HTMLSelectElement | null;
-    const pickupInput = document.getElementById("checkPickup") as HTMLInputElement | null;
     const resultsPanel = document.getElementById("checkResults");
     const resultsContent = document.getElementById("resultsContent");
 
@@ -71,7 +64,7 @@ import { cars } from '../../data/cars';
     form.addEventListener("submit", (e) => {
       e.preventDefault();
 
-      if (!dateStart || !dateEnd || !carSelect || !pickupInput) return;
+      if (!dateStart || !dateEnd || !carSelect) return;
 
       const start = new Date(dateStart.value);
       const end = new Date(dateEnd.value);
@@ -86,7 +79,6 @@ import { cars } from '../../data/cars';
       }
 
       const selectedCarName = carSelect.value;
-      const pickupLocation = pickupInput.value.trim();
 
       // Retrieve bookings
       const bookings = JSON.parse(localStorage.getItem("kgyk_bookings") || "[]");
@@ -173,12 +165,10 @@ import { cars } from '../../data/cars';
             return;
           }
 
-          // Pre-fill fields in main Booking Form
+           // Pre-fill fields in main Booking Form
           const formCar = document.getElementById("formCar") as HTMLSelectElement | null;
           const formDateStart = document.getElementById("formDateStart") as HTMLInputElement | null;
           const formDateEnd = document.getElementById("formDateEnd") as HTMLInputElement | null;
-          const formPickup = document.getElementById("formPickup") as HTMLInputElement | null;
-          const formDropoff = document.getElementById("formDropoff") as HTMLInputElement | null;
 
           if (formCar) {
             formCar.value = carName;
@@ -191,12 +181,6 @@ import { cars } from '../../data/cars';
           if (formDateEnd) {
             formDateEnd.value = dateEnd.value;
             formDateEnd.dispatchEvent(new Event("change"));
-          }
-          if (formPickup) {
-            formPickup.value = pickupLocation;
-          }
-          if (formDropoff) {
-            formDropoff.value = pickupLocation;
           }
 
           // Scroll to Booking Form section
