@@ -157,9 +157,9 @@
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" is:inline></script>
-
 <script>
+  import html2canvas from 'html2canvas-pro';
+
   document.addEventListener("DOMContentLoaded", () => {
     const successModal = document.getElementById("successModal");
     const modalContent = document.getElementById("modalContent");
@@ -203,7 +203,7 @@
       const booking = (window as any).__lastBooking;
       const filename = `Struk-${booking ? booking.bookingCode : "Booking"}.png`;
 
-      if ((window as any).html2canvas) {
+      if (html2canvas) {
         // Create an off-screen clone container to isolate rendering from parent transforms/transitions
         const clone = element.cloneNode(true) as HTMLElement;
         clone.style.position = "absolute";
@@ -219,7 +219,7 @@
 
         // Wait a tiny bit for the clone to mount and compute styles
         setTimeout(() => {
-          (window as any).html2canvas(clone, {
+          html2canvas(clone, {
             scale: 2,
             useCORS: true,
             backgroundColor: '#ffffff',
@@ -249,7 +249,7 @@
             if (document.body.contains(clone)) {
               document.body.removeChild(clone);
             }
-            alert("Gagal mengunduh gambar.");
+            alert("Gagal mengunduh gambar: " + (err.message || err.toString()));
           });
         }, 50);
       } else {
@@ -296,19 +296,33 @@
 
 <style>
   @media print {
-    body * {
-      visibility: hidden;
+    body > *:not(#successModal) {
+      display: none !important;
     }
-    #receipt-print-area,
-    #receipt-print-area * {
-      visibility: visible;
+    #successModal {
+      position: absolute !important;
+      left: 0 !important;
+      top: 0 !important;
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      background: white !important;
+    }
+    #modalContent {
+      box-shadow: none !important;
+      border: none !important;
+      max-width: 100% !important;
+      width: 100% !important;
+      max-height: none !important;
+      height: auto !important;
+    }
+    #modalContent > *:not(#receipt-print-area) {
+      display: none !important;
     }
     #receipt-print-area {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      padding: 20px;
+      padding: 0 !important;
+      margin: 0 !important;
+      width: 100% !important;
     }
   }
 </style>
