@@ -71,8 +71,64 @@ import Footer from '../components/Footer.astro';
     </div>
   </main>
 
-  <!-- Footer -->
-  <Footer />
+  <!-- Modal Detail Struk (Inline Popup) -->
+  <div id="historyReceiptModal" class="fixed inset-0 z-[100] hidden items-center justify-center">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-navy/60 backdrop-blur-sm transition-opacity" id="historyReceiptModalBackdrop"></div>
+
+    <!-- Modal Content -->
+    <div class="bg-white rounded-3xl max-w-lg w-full mx-4 relative z-10 transform scale-95 opacity-0 transition-all duration-300 shadow-2xl flex flex-col max-h-[92vh]" id="historyReceiptModalContent">
+      
+      <!-- Non-printable top bar -->
+      <div class="px-5 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50 rounded-t-3xl print:hidden">
+        <span class="text-sm font-extrabold text-slate-800">Detail Struk Reservasi</span>
+        <button id="closeHistoryReceiptModalBtn" class="w-8 h-8 rounded-full hover:bg-slate-200 text-slate-400 hover:text-slate-600 flex items-center justify-center transition-colors cursor-pointer">
+          <i class="ph ph-x text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Printable Receipt Content -->
+      <div id="historyReceiptModalPrintArea" class="p-4 sm:p-6 overflow-y-auto print:overflow-visible print:p-4">
+        <!-- Dynamic content will be injected here -->
+      </div>
+
+      <!-- Action Buttons (non-printable) -->
+      <div class="px-6 pb-5 pt-2 flex flex-col gap-3 print:hidden">
+        <div class="flex gap-3">
+          <button id="printHistoryReceiptBtn" class="flex-1 py-3 px-4 bg-primary hover:bg-blue-700 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-lg cursor-pointer text-sm">
+            <i class="ph ph-printer text-lg"></i>
+            Cetak Struk
+          </button>
+          <button id="downloadHistoryReceiptBtn" class="flex-1 py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-lg cursor-pointer text-sm">
+            <i class="ph ph-download text-lg"></i>
+            Unduh Gambar
+          </button>
+        </div>
+        <button id="closeHistoryReceiptModalBtn2" class="w-full py-3 px-4 border border-slate-200 hover:bg-slate-50 text-slate-600 font-bold rounded-xl transition-all cursor-pointer text-sm">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #historyReceiptModalPrintArea,
+      #historyReceiptModalPrintArea * {
+        visibility: visible;
+      }
+      #historyReceiptModalPrintArea {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        padding: 0;
+      }
+    }
+  </style>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" is:inline></script>
 </Layout>
 
 <script>
@@ -111,122 +167,214 @@ import Footer from '../components/Footer.astro';
       return new Date(dateStr).toLocaleDateString("id-ID", { day: 'numeric', month: 'short', year: 'numeric' });
     };
 
-    // Build receipt HTML for print popup
-    const openReceiptPopup = (b: any) => {
-      const printWindow = window.open('', '_blank', 'width=420,height=700');
-      if (!printWindow) return;
+    // Modal elements for receipt inline viewer
+    const historyReceiptModal = document.getElementById("historyReceiptModal");
+    const historyReceiptModalContent = document.getElementById("historyReceiptModalContent");
+    const historyReceiptModalBackdrop = document.getElementById("historyReceiptModalBackdrop");
+    const historyReceiptModalPrintArea = document.getElementById("historyReceiptModalPrintArea");
+    const closeHistoryReceiptModalBtn = document.getElementById("closeHistoryReceiptModalBtn");
+    const closeHistoryReceiptModalBtn2 = document.getElementById("closeHistoryReceiptModalBtn2");
+    const printHistoryReceiptBtn = document.getElementById("printHistoryReceiptBtn");
+    const downloadHistoryReceiptBtn = document.getElementById("downloadHistoryReceiptBtn");
+
+    let activeBooking: any = null;
+
+    const openReceiptModal = (b: any) => {
+      activeBooking = b;
+      if (!historyReceiptModal || !historyReceiptModalPrintArea || !historyReceiptModalContent) return;
 
       const deadline = formatDate(b.endDate) + ', 16:00 WIB';
       const hasLateFee = b.lateFee && b.lateFee > 0;
       const isPaid = b.paymentStatus === 'Lunas';
 
-      printWindow.document.write(`
-        <!DOCTYPE html>
-        <html><head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Struk ${b.bookingCode || ''}</title>
-        <style>
-          * { box-sizing: border-box; margin: 0; padding: 0; }
-          body { font-family: 'Segoe UI', Arial, sans-serif; padding: 16px; max-width: 400px; width: 100%; margin: 0 auto; color: #334155; font-size: 11px; }
-          .header { text-align: center; border-bottom: 2px dashed #e2e8f0; padding-bottom: 12px; margin-bottom: 12px; }
-          .header h2 { font-size: 14px; font-weight: 800; color: #0f172a; }
-          .header p { font-size: 8px; color: #94a3b8; }
-          .title { text-align: center; margin-bottom: 12px; }
-          .title h3 { font-size: 12px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
-          .title p { font-size: 8px; color: #94a3b8; }
-          .code-box { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; display: flex; justify-content: space-between; margin-bottom: 12px; }
-          .code-box .code { font-family: monospace; font-size: 14px; font-weight: 800; color: #2563eb; letter-spacing: 3px; }
-          .code-box .date { font-size: 9px; color: #64748b; text-align: right; }
-          .section-title { font-size: 8px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #f1f5f9; padding-bottom: 4px; margin-bottom: 6px; }
-          .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 12px; }
-          .grid .label { font-size: 7px; font-weight: 700; color: #94a3b8; }
-          .grid .value { font-size: 9px; font-weight: 600; color: #334155; }
-          .total-line { display: flex; justify-content: space-between; padding: 4px 0; font-size: 10px; }
-          .total-line.grand { border-top: 1px solid #e2e8f0; padding-top: 8px; margin-top: 4px; font-size: 12px; font-weight: 800; }
-          .penalty { background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 6px; margin: 6px 0; }
-          .penalty span { color: #dc2626; font-weight: 700; }
-          .status-badge { text-align: center; margin: 8px 0; }
-          .status-badge span { display: inline-block; padding: 4px 16px; border-radius: 20px; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-          .status-paid { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
-          .status-unpaid { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; }
-          .footer { border-top: 2px dashed #e2e8f0; padding-top: 10px; text-align: center; }
-          .footer p { font-size: 7px; color: #94a3b8; margin-bottom: 3px; }
-          .btn-print { display: block; width: 100%; margin-top: 16px; padding: 10px; background: #2563eb; color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 12px; cursor: pointer; }
-          .btn-print:hover { background: #1d4ed8; }
-          @media print { .no-print { display: none; } }
-        </style></head><body>
-          <div class="header">
-            <h2>🚗 KGYK RENTAL MOBIL</h2>
-            <p>Jl. Pandega Marga, Caturtunggal, Depok, Sleman, DIY 55281<br>Telp/WA: +62 812 3456 7890 • cs@kgyk.com</p>
+      historyReceiptModalPrintArea.innerHTML = `
+        <!-- Receipt Header -->
+        <div class="text-center border-b-2 border-dashed border-slate-200 pb-3 mb-3">
+          <div class="flex items-center justify-center gap-2 mb-1">
+            <span class="w-6 h-6 rounded bg-primary text-white flex items-center justify-center font-black text-xs font-mono">K</span>
+            <span class="font-extrabold text-sm text-navy tracking-tight">KGYK RENTAL MOBIL</span>
           </div>
-          <div class="title">
-            <h3>${isPaid ? (hasLateFee ? 'STRUK PENGEMBALIAN' : 'STRUK PEMBAYARAN') : 'STRUK PEMESANAN'}</h3>
-            <p>${isPaid ? 'Bukti transaksi sewa kendaraan' : 'Tunjukkan struk ini saat pengambilan kendaraan'}</p>
+          <p class="text-[9px] text-slate-400 font-medium leading-relaxed font-sans">
+            Jl. Pandega Marga, Caturtunggal, Kec. Depok, Sleman, DIY 55281<br/>
+            Telp/WA: +62 812 3456 7890 • Email: cs@kgyk.com
+          </p>
+        </div>
+
+        <!-- Receipt Title -->
+        <div class="text-center mb-3">
+          <h3 class="text-sm font-extrabold text-navy tracking-wider uppercase">${isPaid ? (hasLateFee ? 'STRUK PENGEMBALIAN' : 'STRUK PEMBAYARAN') : 'STRUK PEMESANAN'}</h3>
+          <p class="text-[9px] text-slate-400 font-semibold mt-0.5">${isPaid ? 'Bukti transaksi sewa kendaraan' : 'Tunjukkan struk ini kepada petugas saat pengambilan kendaraan'}</p>
+        </div>
+
+        <!-- Booking Code -->
+        <div class="bg-blue-50 border border-blue-100 rounded-xl p-3 mb-3 flex items-center justify-between">
+          <div>
+            <span class="text-[9px] text-slate-400 font-bold block uppercase">Kode Booking</span>
+            <span class="text-md font-extrabold text-primary font-mono tracking-widest">${b.bookingCode || '-'}</span>
           </div>
-          <div class="code-box">
-            <div><div class="label">KODE BOOKING</div><div class="code">${b.bookingCode || '-'}</div></div>
-            <div class="date"><div class="label">TANGGAL CETAK</div>${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+          <div class="text-right">
+            <span class="text-[9px] text-slate-400 font-bold block uppercase">Tanggal Cetak</span>
+            <span class="text-[10px] font-bold text-slate-600">${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
           </div>
-          <div class="section-title">Data Penyewa</div>
-          <div class="grid">
-            <div><div class="label">NAMA</div><div class="value">${b.userName}</div></div>
-            <div><div class="label">EMAIL</div><div class="value">${b.userEmail}</div></div>
+        </div>
+
+        <!-- Customer Info -->
+        <div class="mb-3 space-y-1.5 font-sans">
+          <h5 class="text-[9px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 pb-1">Data Penyewa</h5>
+          <div class="grid grid-cols-2 gap-x-4 gap-y-1">
+            <div>
+              <span class="text-[8px] text-slate-400 font-bold block">NAMA</span>
+              <span class="text-[10px] font-bold text-slate-700">${b.userName}</span>
+            </div>
+            <div>
+              <span class="text-[8px] text-slate-400 font-bold block">EMAIL</span>
+              <span class="text-[10px] font-semibold text-slate-600">${b.userEmail}</span>
+            </div>
           </div>
-          <div class="section-title">Detail Sewa Kendaraan</div>
-          <div class="grid">
-            <div><div class="label">KENDARAAN</div><div class="value">${b.carName}</div></div>
-            <div><div class="label">LAYANAN</div><div class="value">${b.serviceType}</div></div>
-            <div><div class="label">MULAI</div><div class="value">${formatDate(b.startDate)}</div></div>
-            <div><div class="label">SELESAI</div><div class="value">${formatDate(b.endDate)}</div></div>
-            <div><div class="label">DURASI</div><div class="value">${b.duration} Hari</div></div>
-            <div><div class="label">BATAS KEMBALI</div><div class="value">${deadline}</div></div>
-            <div><div class="label">LOKASI AMBIL</div><div class="value">${b.pickupLocation}</div></div>
-            <div><div class="label">LOKASI KEMBALI</div><div class="value">${b.dropoffLocation}</div></div>
+        </div>
+
+        <!-- Vehicle & Rental Details -->
+        <div class="mb-3 space-y-1.5 font-sans">
+          <h5 class="text-[9px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 pb-1">Detail Sewa Kendaraan</h5>
+          <div class="grid grid-cols-2 gap-x-4 gap-y-1">
+            <div>
+              <span class="text-[8px] text-slate-400 font-bold block">KENDARAAN</span>
+              <span class="text-[10px] font-bold text-slate-700">${b.carName}</span>
+            </div>
+            <div>
+              <span class="text-[8px] text-slate-400 font-bold block">LAYANAN</span>
+              <span class="text-[10px] font-semibold text-slate-600">${b.serviceType}</span>
+            </div>
+            <div>
+              <span class="text-[8px] text-slate-400 font-bold block">TANGGAL MULAI</span>
+              <span class="text-[10px] font-bold text-slate-700">${formatDate(b.startDate)}</span>
+            </div>
+            <div>
+              <span class="text-[8px] text-slate-400 font-bold block">TANGGAL SELESAI</span>
+              <span class="text-[10px] font-bold text-slate-700">${formatDate(b.endDate)}</span>
+            </div>
+            <div>
+              <span class="text-[8px] text-slate-400 font-bold block">DURASI</span>
+              <span class="text-[10px] font-bold text-slate-700">${b.duration} Hari</span>
+            </div>
+            <div>
+              <span class="text-[8px] text-slate-400 font-bold block">BATAS KEMBALI</span>
+              <span class="text-[10px] font-bold text-slate-700">${deadline}</span>
+            </div>
+            <div class="col-span-2">
+              <span class="text-[8px] text-slate-400 font-bold block">LOKASI AMBIL</span>
+              <span class="text-[10px] font-semibold text-slate-600">${b.pickupLocation}</span>
+            </div>
+            <div class="col-span-2">
+              <span class="text-[8px] text-slate-400 font-bold block">LOKASI KEMBALI</span>
+              <span class="text-[10px] font-semibold text-slate-600">${b.dropoffLocation}</span>
+            </div>
           </div>
-          <div style="border-top: 2px dashed #e2e8f0; padding-top: 8px; margin-bottom: 8px;">
-            <div class="section-title">Rincian Biaya</div>
-            <div class="total-line"><span>Biaya Sewa</span><span style="font-weight:700">${formatRupiah(b.totalPrice)}</span></div>
-            ${hasLateFee ? `<div class="penalty"><div class="total-line"><span class="penalty-text">Denda Keterlambatan (${b.lateFeeHours} jam)</span><span style="color:#dc2626;font-weight:700">+${formatRupiah(b.lateFee)}</span></div></div>` : ''}
-            <div class="total-line grand"><span>TOTAL AKHIR</span><span>${formatRupiah(b.grandTotal || b.totalPrice)}</span></div>
+        </div>
+
+        <!-- Cost -->
+        <div class="border-t-2 border-dashed border-slate-200 pt-3 mb-3 space-y-1 font-sans">
+          <div class="flex justify-between items-center text-[10px]">
+            <span class="text-slate-500 font-medium">Biaya Sewa</span>
+            <span class="font-bold text-slate-700">${formatRupiah(b.totalPrice)}</span>
           </div>
-          <div class="status-badge"><span class="${isPaid ? 'status-paid' : 'status-unpaid'}">${isPaid ? '✓ LUNAS' : '⏳ BELUM BAYAR'}</span></div>
-          <div class="footer">
-            <p>Keterlambatan pengembalian melewati jam 16:00 WIB pada tanggal akhir sewa dikenakan denda 10% tarif harian per jam. Lebih dari 5 jam = 1 hari penuh.</p>
-            <p style="margin-top:6px;font-size:6px;color:#cbd5e1">Dicetak pada: ${new Date().toLocaleString('id-ID')} • KGYK Rental Mobil Yogyakarta</p>
+          ${hasLateFee ? `
+            <div class="bg-red-50 border border-red-100 rounded-lg p-2 my-1.5 font-sans">
+              <div class="flex justify-between items-center text-[10px]">
+                <span class="text-red-600 font-bold font-sans">Denda Keterlambatan (${b.lateFeeHours} jam)</span>
+                <span class="text-red-600 font-bold font-sans">+${formatRupiah(b.lateFee)}</span>
+              </div>
+            </div>
+          ` : ''}
+          <div class="flex justify-between items-center text-[12px] font-extrabold text-navy border-t border-slate-100 pt-2 mt-1">
+            <span>TOTAL AKHIR</span>
+            <span>${formatRupiah(b.grandTotal || b.totalPrice)}</span>
           </div>
-          <div id="receiptControls" style="display: flex; gap: 10px; margin-top: 16px;" class="no-print">
-            <button class="btn-print" style="margin-top: 0; flex: 1; width: auto;" onclick="window.print()">🖨️ Cetak</button>
-            <button class="btn-print" style="margin-top: 0; flex: 1; width: auto; background: #059669;" onclick="downloadImage()">📥 Unduh Gambar</button>
-          </div>
-          <` + `script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></` + `script>
-          <` + `script>
-            function downloadImage() {
-              const element = document.body;
-              const controls = document.getElementById('receiptControls');
-              if (controls) controls.style.display = 'none';
-              html2canvas(element, {
-                scale: 2,
-                useCORS: true,
-                backgroundColor: '#ffffff'
-              }).then(function(canvas) {
-                const imgData = canvas.toDataURL('image/png');
-                const link = document.createElement('a');
-                link.download = 'Struk-${b.bookingCode || "Booking"}.png';
-                link.href = imgData;
-                link.click();
-                if (controls) controls.style.display = 'flex';
-              }).catch(function(err) {
-                console.error(err);
-                alert("Gagal mengunduh gambar.");
-                if (controls) controls.style.display = 'flex';
-              });
-            }
-          </` + `script>
-        </body></html>
-      `);
-      printWindow.document.close();
+        </div>
+
+        <!-- Payment Status Badge -->
+        <div class="text-center mb-3">
+          <span class="inline-flex items-center gap-1.5 px-4 py-1.5 ${isPaid ? 'bg-green-50 text-green-700 border-green-200' : 'bg-amber-50 text-amber-700 border-amber-200'} border rounded-full text-[10px] font-extrabold uppercase tracking-wider font-sans">
+            ${isPaid ? 'LUNAS' : 'BELUM BAYAR'}
+          </span>
+        </div>
+
+        <!-- Footer -->
+        <div class="border-t-2 border-dashed border-slate-200 pt-3 text-center space-y-1 font-sans">
+          <p class="text-[8px] text-slate-400 font-medium leading-relaxed">
+            ${isPaid ? 'Bukti transaksi sewa kendaraan ini sah dan resmi dari pihak KGYK Rental.' : 'Struk ini wajib ditunjukkan kepada petugas saat pengambilan kendaraan. Pembayaran dilakukan di tempat.'}
+          </p>
+          <p class="text-[8px] text-slate-400 font-semibold leading-relaxed">
+            Keterlambatan pengembalian melewati jam 16:00 WIB pada tanggal akhir sewa<br/>
+            dikenakan denda 10% tarif harian per jam. Lebih dari 5 jam = 1 hari penuh.
+          </p>
+          <p class="text-[7px] text-slate-300 font-semibold pt-2">
+            Dicetak pada: ${new Date().toLocaleString("id-ID")} • KGYK Rental Mobil Yogyakarta
+          </p>
+        </div>
+      `;
+
+      // Show modal with animation
+      historyReceiptModal.classList.remove("hidden");
+      historyReceiptModal.classList.add("flex");
+      setTimeout(() => {
+        historyReceiptModalContent.classList.remove("scale-95", "opacity-0");
+        historyReceiptModalContent.classList.add("scale-100", "opacity-100");
+      }, 10);
     };
+
+    const closeReceiptModal = () => {
+      if (!historyReceiptModal || !historyReceiptModalContent) return;
+      historyReceiptModalContent.classList.remove("scale-100", "opacity-100");
+      historyReceiptModalContent.classList.add("scale-95", "opacity-0");
+      setTimeout(() => {
+        historyReceiptModal.classList.add("hidden");
+        historyReceiptModal.classList.remove("flex");
+        activeBooking = null;
+      }, 300);
+    };
+
+    // Close button & backdrop events
+    closeHistoryReceiptModalBtn?.addEventListener("click", closeReceiptModal);
+    closeHistoryReceiptModalBtn2?.addEventListener("click", closeReceiptModal);
+    historyReceiptModalBackdrop?.addEventListener("click", closeReceiptModal);
+
+    // Print receipt
+    printHistoryReceiptBtn?.addEventListener("click", () => {
+      window.print();
+    });
+
+    // Download receipt image
+    downloadHistoryReceiptBtn?.addEventListener("click", () => {
+      if (!historyReceiptModalPrintArea || !activeBooking) return;
+
+      const filename = `Struk-${activeBooking.bookingCode || "Booking"}.png`;
+
+      if ((window as any).html2canvas) {
+        (window as any).html2canvas(historyReceiptModalPrintArea, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: '#ffffff'
+        }).then((canvas: HTMLCanvasElement) => {
+          canvas.toBlob(function(blob) {
+            if (!blob) return;
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = url;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(() => URL.revokeObjectURL(url), 100);
+          }, 'image/png');
+        }).catch((err: any) => {
+          console.error(err);
+          alert("Gagal mengunduh gambar.");
+        });
+      } else {
+        alert("Gagal memuat modul gambar. Silakan gunakan tombol Cetak.");
+      }
+    });
 
     const renderBookings = () => {
       const currentUser = JSON.parse(localStorage.getItem("kgyk_current_user") || "null");
@@ -410,7 +558,7 @@ import Footer from '../components/Footer.astro';
         btn.addEventListener("click", () => {
           const id = parseInt(btn.getAttribute("data-receipt-id") || "0");
           const booking = displayedBookings.find((b: any) => b.id === id);
-          if (booking) openReceiptPopup(booking);
+          if (booking) openReceiptModal(booking);
         });
       });
 
@@ -444,7 +592,7 @@ import Footer from '../components/Footer.astro';
               bookings[index].releasedAt = now;
               localStorage.setItem("kgyk_bookings", JSON.stringify(bookings));
               renderBookings();
-              openReceiptPopup(bookings[index]);
+              openReceiptModal(bookings[index]);
               if ((window as any).showToast) {
                 (window as any).showToast(`Kendaraan telah dilepas & pembayaran diterima!`, 'success');
               }
@@ -488,7 +636,7 @@ import Footer from '../components/Footer.astro';
 
               localStorage.setItem("kgyk_bookings", JSON.stringify(bookings));
               renderBookings();
-              openReceiptPopup(bookings[index]);
+              openReceiptModal(bookings[index]);
               if ((window as any).showToast) {
                 const msg = lateHours > 0
                   ? `Mobil dikembalikan dengan denda ${formatRupiah(lateFee)} (${lateHours} jam terlambat)`

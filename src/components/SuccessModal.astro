@@ -209,11 +209,17 @@
           useCORS: true,
           backgroundColor: '#ffffff'
         }).then((canvas: HTMLCanvasElement) => {
-          const imgData = canvas.toDataURL('image/png');
-          const link = document.createElement('a');
-          link.download = filename;
-          link.href = imgData;
-          link.click();
+          canvas.toBlob(function(blob) {
+            if (!blob) return;
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = url;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(() => URL.revokeObjectURL(url), 100);
+          }, 'image/png');
         }).catch((err: any) => {
           console.error(err);
           alert("Gagal mengunduh gambar.");
