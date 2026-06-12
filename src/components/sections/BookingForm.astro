@@ -369,9 +369,18 @@ import { cars } from '../../data/cars';
         return;
       }
 
+      // Generate booking code
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let bookingCode = 'KGYK-';
+      for (let i = 0; i < 6; i++) {
+        bookingCode += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+
       // Save new booking
+      const totalPrice = car.price * diffDays;
       const newBooking = {
         id: Date.now(),
+        bookingCode: bookingCode,
         userEmail: currentUser.email,
         userName: currentUser.fullName,
         carId: car.id,
@@ -383,12 +392,22 @@ import { cars } from '../../data/cars';
         pickupLocation: formPickup.value.trim(),
         dropoffLocation: formDropoff.value.trim(),
         notes: formMessage ? formMessage.value.trim() : "",
-        totalPrice: car.price * diffDays,
-        status: "Menunggu Verifikasi"
+        totalPrice: totalPrice,
+        status: "Menunggu Verifikasi",
+        paymentStatus: "Belum Bayar",
+        paidAt: null,
+        releasedAt: null,
+        returnedAt: null,
+        lateFeeHours: 0,
+        lateFee: 0,
+        grandTotal: totalPrice
       };
 
       bookings.push(newBooking);
       localStorage.setItem("kgyk_bookings", JSON.stringify(bookings));
+
+      // Expose last booking for receipt display
+      (window as any).__lastBooking = newBooking;
 
       // Trigger success event
       window.dispatchEvent(new CustomEvent("booking-success"));

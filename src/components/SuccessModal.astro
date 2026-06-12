@@ -1,20 +1,152 @@
 ---
 ---
-<!-- Modal Sukses Reservasi -->
+<!-- Modal Sukses Reservasi + Struk Pemesanan -->
 <div id="successModal" class="fixed inset-0 z-[100] hidden items-center justify-center">
   <!-- Backdrop -->
   <div class="absolute inset-0 bg-navy/60 backdrop-blur-sm transition-opacity" id="modalBackdrop"></div>
 
   <!-- Modal Content -->
-  <div class="bg-white rounded-3xl p-8 max-w-md w-full mx-4 relative z-10 transform scale-95 opacity-0 transition-all duration-300 shadow-2xl" id="modalContent">
-    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-      <i class="ph-fill ph-check-circle text-5xl text-green-500"></i>
+  <div class="bg-white rounded-3xl max-w-lg w-full mx-4 relative z-10 transform scale-95 opacity-0 transition-all duration-300 shadow-2xl flex flex-col max-h-[92vh]" id="modalContent">
+    
+    <!-- Non-printable top bar -->
+    <div class="px-5 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50 rounded-t-3xl print:hidden">
+      <div class="flex items-center gap-2">
+        <div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+          <i class="ph-fill ph-check text-white text-xs font-bold"></i>
+        </div>
+        <span class="text-sm font-extrabold text-slate-800">Reservasi Berhasil!</span>
+      </div>
+      <button id="closeModalBtn" class="w-8 h-8 rounded-full hover:bg-slate-200 text-slate-400 hover:text-slate-600 flex items-center justify-center transition-colors cursor-pointer">
+        <i class="ph ph-x text-lg"></i>
+      </button>
     </div>
-    <h3 class="text-2xl font-bold text-navy text-center mb-2">Reservasi Berhasil!</h3>
-    <p class="text-slate-600 text-center mb-8">Terima kasih telah melakukan reservasi. Tim kami akan segera menghubungi Anda untuk memproses pesanan ini.</p>
-    <div class="flex flex-col gap-3">
-      <a href="/history" class="w-full py-3 px-6 bg-primary hover:bg-blue-700 text-white font-bold rounded-xl transition-all text-center block shadow-md hover:shadow-lg">Lihat Pesanan Saya</a>
-      <button id="closeModalBtn" class="w-full py-3 px-6 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-all cursor-pointer">Kembali ke Beranda</button>
+
+    <!-- Printable Receipt Content -->
+    <div id="receipt-print-area" class="p-6 overflow-y-auto print:overflow-visible print:p-4">
+      <!-- Receipt Header -->
+      <div class="text-center border-b-2 border-dashed border-slate-200 pb-3 mb-3">
+        <div class="flex items-center justify-center gap-2 mb-1">
+          <div class="w-7 h-7 bg-primary rounded-lg flex items-center justify-center">
+            <i class="ph-fill ph-steering-wheel text-sm text-white"></i>
+          </div>
+          <span class="font-extrabold text-sm text-navy tracking-tight">KGYK RENTAL MOBIL</span>
+        </div>
+        <p class="text-[9px] text-slate-400 font-medium leading-relaxed">
+          Jl. Pandega Marga, Caturtunggal, Kec. Depok, Sleman, DIY 55281<br/>
+          Telp/WA: +62 812 3456 7890 • Email: cs@kgyk.com
+        </p>
+      </div>
+
+      <!-- Receipt Title -->
+      <div class="text-center mb-3">
+        <h3 class="text-sm font-extrabold text-navy tracking-wider uppercase">STRUK PEMESANAN</h3>
+        <p class="text-[9px] text-slate-400 font-semibold mt-0.5">Tunjukkan struk ini kepada petugas saat pengambilan kendaraan</p>
+      </div>
+
+      <!-- Booking Code -->
+      <div class="bg-blue-50 border border-blue-100 rounded-xl p-3 mb-3 flex items-center justify-between">
+        <div>
+          <span class="text-[9px] text-slate-400 font-bold block uppercase">Kode Booking</span>
+          <span id="receiptBookingCode" class="text-md font-extrabold text-primary font-mono tracking-widest">-</span>
+        </div>
+        <div class="text-right">
+          <span class="text-[9px] text-slate-400 font-bold block uppercase">Tanggal Cetak</span>
+          <span id="receiptPrintDate" class="text-[10px] font-bold text-slate-600">-</span>
+        </div>
+      </div>
+
+      <!-- Customer Info -->
+      <div class="mb-3 space-y-1.5">
+        <h5 class="text-[9px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 pb-1">Data Penyewa</h5>
+        <div class="grid grid-cols-2 gap-x-4 gap-y-1">
+          <div>
+            <span class="text-[8px] text-slate-400 font-bold block">NAMA</span>
+            <span id="receiptName" class="text-[10px] font-bold text-slate-700">-</span>
+          </div>
+          <div>
+            <span class="text-[8px] text-slate-400 font-bold block">EMAIL</span>
+            <span id="receiptEmail" class="text-[10px] font-semibold text-slate-600">-</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vehicle & Rental Details -->
+      <div class="mb-3 space-y-1.5">
+        <h5 class="text-[9px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 pb-1">Detail Sewa Kendaraan</h5>
+        <div class="grid grid-cols-2 gap-x-4 gap-y-1">
+          <div>
+            <span class="text-[8px] text-slate-400 font-bold block">KENDARAAN</span>
+            <span id="receiptCar" class="text-[10px] font-bold text-slate-700">-</span>
+          </div>
+          <div>
+            <span class="text-[8px] text-slate-400 font-bold block">LAYANAN</span>
+            <span id="receiptService" class="text-[10px] font-semibold text-slate-600">-</span>
+          </div>
+          <div>
+            <span class="text-[8px] text-slate-400 font-bold block">TANGGAL MULAI</span>
+            <span id="receiptStartDate" class="text-[10px] font-bold text-slate-700">-</span>
+          </div>
+          <div>
+            <span class="text-[8px] text-slate-400 font-bold block">TANGGAL SELESAI</span>
+            <span id="receiptEndDate" class="text-[10px] font-bold text-slate-700">-</span>
+          </div>
+          <div>
+            <span class="text-[8px] text-slate-400 font-bold block">DURASI</span>
+            <span id="receiptDuration" class="text-[10px] font-bold text-slate-700">-</span>
+          </div>
+          <div>
+            <span class="text-[8px] text-slate-400 font-bold block">BATAS KEMBALI</span>
+            <span id="receiptDeadline" class="text-[10px] font-bold text-slate-700">-</span>
+          </div>
+          <div>
+            <span class="text-[8px] text-slate-400 font-bold block">LOKASI AMBIL</span>
+            <span id="receiptPickup" class="text-[10px] font-semibold text-slate-600">-</span>
+          </div>
+          <div>
+            <span class="text-[8px] text-slate-400 font-bold block">LOKASI KEMBALI</span>
+            <span id="receiptDropoff" class="text-[10px] font-semibold text-slate-600">-</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cost -->
+      <div class="border-t-2 border-dashed border-slate-200 pt-3 mb-3 space-y-2">
+        <div class="flex justify-between items-center text-[10px]">
+          <span class="text-slate-500 font-medium">Estimasi Biaya Sewa</span>
+          <span id="receiptTotal" class="font-extrabold text-navy">-</span>
+        </div>
+      </div>
+
+      <!-- Payment Status -->
+      <div class="text-center mb-3">
+        <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-amber-50 text-amber-700 border border-amber-200 rounded-full text-[10px] font-extrabold uppercase tracking-wider">
+          <i class="ph-fill ph-clock text-sm"></i> BELUM BAYAR
+        </span>
+      </div>
+
+      <!-- Footer -->
+      <div class="border-t-2 border-dashed border-slate-200 pt-3 text-center space-y-1">
+        <p class="text-[8px] text-slate-400 font-medium leading-relaxed">
+          Struk ini wajib ditunjukkan kepada petugas saat pengambilan kendaraan. Pembayaran dilakukan di tempat.
+        </p>
+        <p class="text-[8px] text-slate-400 font-semibold">
+          Keterlambatan pengembalian melewati jam 16:00 WIB pada tanggal akhir sewa<br/>
+          dikenakan denda 10% tarif harian per jam. Lebih dari 5 jam = 1 hari penuh.
+        </p>
+        <p id="receiptTimestamp" class="text-[7px] text-slate-300 font-semibold pt-2">-</p>
+      </div>
+    </div>
+
+    <!-- Action Buttons (non-printable) -->
+    <div class="px-6 pb-5 pt-2 flex flex-col gap-3 print:hidden">
+      <button id="printReceiptBtn" class="w-full py-3 px-6 bg-primary hover:bg-blue-700 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-lg cursor-pointer">
+        <i class="ph ph-printer text-lg"></i>
+        Cetak Struk Pemesanan
+      </button>
+      <div class="flex gap-3">
+        <a href="/history" class="flex-1 py-3 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-all text-center text-sm">Lihat Pesanan</a>
+        <button id="closeModalBtn2" class="flex-1 py-3 px-4 border border-slate-200 hover:bg-slate-50 text-slate-600 font-bold rounded-xl transition-all cursor-pointer text-sm">Tutup</button>
+      </div>
     </div>
   </div>
 </div>
@@ -24,14 +156,23 @@
     const successModal = document.getElementById("successModal");
     const modalContent = document.getElementById("modalContent");
     const closeModalBtn = document.getElementById("closeModalBtn");
+    const closeModalBtn2 = document.getElementById("closeModalBtn2");
     const modalBackdrop = document.getElementById("modalBackdrop");
+    const printReceiptBtn = document.getElementById("printReceiptBtn");
 
     if (!successModal || !modalContent || !closeModalBtn || !modalBackdrop) return;
+
+    const formatRupiah = (number: number) => {
+      return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(number);
+    };
+
+    const formatDate = (dateStr: string) => {
+      return new Date(dateStr).toLocaleDateString("id-ID", { day: 'numeric', month: 'long', year: 'numeric' });
+    };
 
     const closeModal = () => {
       modalContent.classList.remove("scale-100", "opacity-100");
       modalContent.classList.add("scale-95", "opacity-0");
-
       setTimeout(() => {
         successModal.classList.add("hidden");
         successModal.classList.remove("flex");
@@ -39,13 +180,42 @@
     };
 
     closeModalBtn.addEventListener("click", closeModal);
+    closeModalBtn2?.addEventListener("click", closeModal);
     modalBackdrop.addEventListener("click", closeModal);
 
-    // Listen to custom booking-success event
+    printReceiptBtn?.addEventListener("click", () => {
+      window.print();
+    });
+
+    // Listen to booking-success event → populate receipt
     window.addEventListener("booking-success", () => {
+      const booking = (window as any).__lastBooking;
+      if (!booking) return;
+
+      // Populate receipt fields
+      const setField = (id: string, value: string) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+      };
+
+      setField("receiptBookingCode", booking.bookingCode);
+      setField("receiptPrintDate", new Date().toLocaleDateString("id-ID", { day: 'numeric', month: 'long', year: 'numeric' }));
+      setField("receiptName", booking.userName);
+      setField("receiptEmail", booking.userEmail);
+      setField("receiptCar", booking.carName);
+      setField("receiptService", booking.serviceType);
+      setField("receiptStartDate", formatDate(booking.startDate));
+      setField("receiptEndDate", formatDate(booking.endDate));
+      setField("receiptDuration", booking.duration + " Hari");
+      setField("receiptDeadline", formatDate(booking.endDate) + ", 16:00 WIB");
+      setField("receiptPickup", booking.pickupLocation);
+      setField("receiptDropoff", booking.dropoffLocation);
+      setField("receiptTotal", formatRupiah(booking.totalPrice));
+      setField("receiptTimestamp", `Dicetak pada: ${new Date().toLocaleString("id-ID")} • KGYK Rental Mobil Yogyakarta`);
+
+      // Show modal
       successModal.classList.remove("hidden");
       successModal.classList.add("flex");
-
       setTimeout(() => {
         modalContent.classList.remove("scale-95", "opacity-0");
         modalContent.classList.add("scale-100", "opacity-100");
@@ -53,3 +223,22 @@
     });
   });
 </script>
+
+<style>
+  @media print {
+    body * {
+      visibility: hidden;
+    }
+    #receipt-print-area,
+    #receipt-print-area * {
+      visibility: visible;
+    }
+    #receipt-print-area {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      padding: 20px;
+    }
+  }
+</style>

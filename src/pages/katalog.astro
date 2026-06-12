@@ -78,6 +78,15 @@ const description = "Temukan berbagai pilihan armada mobil terbaik dan terawat d
 
           </div>
 
+          <!-- Baris 1.5: Filter Tipe Mobil -->
+          <div class="flex flex-wrap gap-2 pb-6 border-b border-slate-100 justify-start">
+            <button class="catalog-filter-btn active px-4 py-2 rounded-full text-xs font-bold bg-primary text-white shadow-md transition-all cursor-pointer" data-filter="all">Semua Tipe</button>
+            <button class="catalog-filter-btn px-4 py-2 rounded-full text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all cursor-pointer" data-filter="mpv">MPV</button>
+            <button class="catalog-filter-btn px-4 py-2 rounded-full text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all cursor-pointer" data-filter="suv">SUV</button>
+            <button class="catalog-filter-btn px-4 py-2 rounded-full text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all cursor-pointer" data-filter="city car">City Car</button>
+            <button class="catalog-filter-btn px-4 py-2 rounded-full text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all cursor-pointer" data-filter="van">Van</button>
+          </div>
+
           <!-- Baris 2: Cek Ketersediaan Berdasarkan Tanggal -->
           <div class="bg-blue-50/50 rounded-2xl p-5 border border-blue-100/50">
             <h3 class="text-sm font-bold text-navy mb-3 flex items-center gap-2">
@@ -165,6 +174,8 @@ const description = "Temukan berbagai pilihan armada mobil terbaik dan terawat d
     const noCarFound = document.getElementById("noCarFound");
     const searchInput = document.getElementById("searchInput") as HTMLInputElement | null;
     const sortSelect = document.getElementById("sortSelect") as HTMLSelectElement | null;
+    const catalogFilterBtns = document.querySelectorAll(".catalog-filter-btn");
+    let currentCategoryFilter = 'all';
     
     // Date availability checker elements
     const checkStartDate = document.getElementById("checkStartDate") as HTMLInputElement | null;
@@ -300,6 +311,11 @@ const description = "Temukan berbagai pilihan armada mobil terbaik dan terawat d
         result = result.filter(car => car.name.toLowerCase().includes(searchVal));
       }
 
+      // 2. Filter by category
+      if (currentCategoryFilter !== 'all') {
+        result = result.filter(car => car.category === currentCategoryFilter);
+      }
+
       // 3. Filter by date-range availability (if dates are provided and user explicitly checked)
       const hasDates = checkStartDate && checkEndDate && checkStartDate.value && checkEndDate.value;
       if (hasDates && triggeredDateCheck) {
@@ -368,7 +384,22 @@ const description = "Temukan berbagai pilihan armada mobil terbaik dan terawat d
     // Initial render
     filterAndSort();
 
-    // Status filter buttons event listener block removed
+    // Category filter buttons event listener
+    catalogFilterBtns.forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        catalogFilterBtns.forEach(b => {
+          b.classList.remove("bg-primary", "text-white", "shadow-md", "active");
+          b.classList.add("bg-slate-100", "text-slate-600");
+        });
+        const target = e.currentTarget as HTMLButtonElement;
+        target.classList.remove("bg-slate-100", "text-slate-600");
+        target.classList.add("bg-primary", "text-white", "shadow-md", "active");
+
+        currentCategoryFilter = target.getAttribute("data-filter") || 'all';
+        const hasDates = !!(checkStartDate && checkEndDate && checkStartDate.value && checkEndDate.value);
+        filterAndSort(hasDates);
+      });
+    });
 
     if (searchInput) {
       searchInput.addEventListener("input", () => {

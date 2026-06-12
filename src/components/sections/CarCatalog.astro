@@ -3,7 +3,7 @@
 <!-- Car Catalog Section -->
 <section id="mobil" class="py-20 bg-white">
   <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-6">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-6">
       <div class="max-w-xl" data-aos="fade-right">
         <h4 class="text-primary font-bold tracking-wider uppercase text-sm mb-2">Katalog Armada</h4>
         <h2 class="text-3xl md:text-4xl font-bold text-navy mb-0">Pilih Mobil Sesuai Kebutuhan Anda</h2>
@@ -11,11 +11,20 @@
 
       <!-- Button Lihat Selengkapnya di Kanan Atas -->
       <div class="shrink-0" data-aos="fade-left">
-        <a href="/katalog" class="inline-flex items-center gap-2 px-6 py-3.5 bg-primary hover:bg-blue-700 text-white text-sm font-bold rounded-2xl shadow-md hover:shadow-lg transition-all duration-300">
-          <span>Lihat Selengkapnya</span>
-          <i class="ph ph-arrow-right font-bold"></i>
+        <a href="/katalog" class="inline-flex items-center gap-1.5 text-primary hover:text-blue-700 text-sm font-bold transition-colors group">
+          <span class="border-b border-transparent group-hover:border-blue-700 pb-0.5">Lihat Selengkapnya</span>
+          <i class="ph ph-arrow-right font-bold group-hover:translate-x-1 transition-transform"></i>
         </a>
       </div>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="flex flex-wrap gap-2 mb-8 justify-center sm:justify-start" data-aos="fade-up">
+      <button class="filter-btn active px-5 py-2.5 rounded-full text-sm font-bold bg-primary text-white shadow-md transition-all cursor-pointer" data-filter="all">Semua Tipe</button>
+      <button class="filter-btn px-5 py-2.5 rounded-full text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all cursor-pointer" data-filter="mpv">MPV</button>
+      <button class="filter-btn px-5 py-2.5 rounded-full text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all cursor-pointer" data-filter="suv">SUV</button>
+      <button class="filter-btn px-5 py-2.5 rounded-full text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all cursor-pointer" data-filter="city car">City Car</button>
+      <button class="filter-btn px-5 py-2.5 rounded-full text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all cursor-pointer" data-filter="van">Van</button>
     </div>
 
     <!-- Car Grid -->
@@ -38,6 +47,7 @@
   document.addEventListener("DOMContentLoaded", () => {
     const carGrid = document.getElementById("carGrid");
     const noCarFound = document.getElementById("noCarFound");
+    const filterBtns = document.querySelectorAll(".filter-btn");
 
     if (!carGrid || !noCarFound) return;
 
@@ -127,8 +137,33 @@
       }
     };
 
-    // Initial render - only show 3 cars on landing page
-    renderCars(cars.slice(0, 3));
+    let currentFilter = 'all';
+
+    const updateFilter = () => {
+      let filteredCars = cars;
+      if (currentFilter !== 'all') {
+        filteredCars = cars.filter(c => c.category === currentFilter);
+      }
+      renderCars(filteredCars.slice(0, 3));
+    };
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        filterBtns.forEach(b => {
+          b.classList.remove("bg-primary", "text-white", "shadow-md", "active");
+          b.classList.add("bg-slate-100", "text-slate-600");
+        });
+        const target = e.currentTarget as HTMLButtonElement;
+        target.classList.remove("bg-slate-100", "text-slate-600");
+        target.classList.add("bg-primary", "text-white", "shadow-md", "active");
+
+        currentFilter = target.getAttribute("data-filter") || 'all';
+        updateFilter();
+      });
+    });
+
+    // Initial render
+    updateFilter();
 
     // Global bookCar mapping
     (window as any).bookCar = (carName: string) => {

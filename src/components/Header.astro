@@ -2,6 +2,7 @@
 const pathname = new URL(Astro.request.url).pathname;
 const isHome = pathname === "/" || pathname === "";
 const isKatalog = pathname.startsWith("/katalog");
+const isGaleri = pathname.startsWith("/galeri");
 ---
 <!-- Header & Navbar -->
 <header id="header" class="fixed top-0 left-1/2 -translate-x-1/2 w-full z-[100] transition-all duration-500 bg-transparent border-b border-transparent">
@@ -20,6 +21,7 @@ const isKatalog = pathname.startsWith("/katalog");
         <a href={isHome ? "#home" : "/#home"} class="font-medium hover:text-primary transition-colors">Beranda</a>
         <a href={isHome ? "#layanan" : "/#layanan"} class="font-medium hover:text-primary transition-colors">Layanan</a>
         <a href={isHome ? "#mobil" : "/katalog"} class={`font-medium hover:text-primary transition-colors ${isKatalog ? 'active' : ''}`}>Mobil</a>
+        <a href="/galeri" class={`font-medium hover:text-primary transition-colors ${isGaleri ? 'active' : ''}`}>Galeri</a>
         <a href={isHome ? "#keunggulan" : "/#keunggulan"} class="font-medium hover:text-primary transition-colors">Keunggulan</a>
         <a href={isHome ? "#testimoni" : "/#testimoni"} class="font-medium hover:text-primary transition-colors">Testimoni</a>
       </nav>
@@ -31,7 +33,7 @@ const isKatalog = pathname.startsWith("/katalog");
           id="guest-cta"
           class="hidden lg:inline-flex items-center justify-center px-6 py-2.5 border border-transparent text-sm font-bold rounded-full text-navy bg-accent hover:bg-yellow-500 hover:shadow-lg hover:shadow-accent/20 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
         >
-          Masuk / Daftar
+          Booking sekarang
         </button>
 
         <!-- User State Profile Dropdown -->
@@ -93,6 +95,7 @@ const isKatalog = pathname.startsWith("/katalog");
       <a href={isHome ? "#home" : "/#home"} class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link">Beranda</a>
       <a href={isHome ? "#layanan" : "/#layanan"} class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link">Layanan</a>
       <a href={isHome ? "#mobil" : "/katalog"} class={`block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link ${isKatalog ? 'active' : ''}`}>Mobil</a>
+      <a href="/galeri" class={`block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link ${isGaleri ? 'active' : ''}`}>Galeri</a>
       <a href={isHome ? "#keunggulan" : "/#keunggulan"} class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link">Keunggulan</a>
       <a href={isHome ? "#testimoni" : "/#testimoni"} class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 hover:text-primary hover:bg-slate-50 mobile-link">Testimoni</a>
       
@@ -360,7 +363,7 @@ const isKatalog = pathname.startsWith("/katalog");
 
     // Click Handlers
     guestCta?.addEventListener("click", () => {
-      if ((window as any).openLoginModal) (window as any).openLoginModal();
+      if ((window as any).openRegisterModal) (window as any).openRegisterModal();
     });
 
     mobileLoginBtn?.addEventListener("click", () => {
