@@ -146,7 +146,7 @@
         </button>
         <button id="downloadReceiptBtn" class="flex-1 py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-lg cursor-pointer text-sm">
           <i class="ph ph-download text-lg"></i>
-          Unduh PDF
+          Unduh Gambar
         </button>
       </div>
       <div class="flex gap-3">
@@ -157,7 +157,7 @@
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" is:inline></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" is:inline></script>
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
@@ -201,20 +201,25 @@
       if (!element) return;
 
       const booking = (window as any).__lastBooking;
-      const filename = `Struk-${booking ? booking.bookingCode : "Booking"}.pdf`;
+      const filename = `Struk-${booking ? booking.bookingCode : "Booking"}.png`;
 
-      const opt = {
-        margin:       10,
-        filename:     filename,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
-
-      if ((window as any).html2pdf) {
-        (window as any).html2pdf().from(element).set(opt).save();
+      if ((window as any).html2canvas) {
+        (window as any).html2canvas(element, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: '#ffffff'
+        }).then((canvas: HTMLCanvasElement) => {
+          const imgData = canvas.toDataURL('image/png');
+          const link = document.createElement('a');
+          link.download = filename;
+          link.href = imgData;
+          link.click();
+        }).catch((err: any) => {
+          console.error(err);
+          alert("Gagal mengunduh gambar.");
+        });
       } else {
-        alert("Gagal memuat modul PDF. Silakan gunakan tombol Cetak.");
+        alert("Gagal memuat modul gambar. Silakan gunakan tombol Cetak.");
       }
     });
 

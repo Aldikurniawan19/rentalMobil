@@ -197,22 +197,28 @@ import Footer from '../components/Footer.astro';
           </div>
           <div id="receiptControls" style="display: flex; gap: 10px; margin-top: 16px;" class="no-print">
             <button class="btn-print" style="margin-top: 0; flex: 1; width: auto;" onclick="window.print()">🖨️ Cetak</button>
-            <button class="btn-print" style="margin-top: 0; flex: 1; width: auto; background: #059669;" onclick="downloadPDF()">📥 Unduh PDF</button>
+            <button class="btn-print" style="margin-top: 0; flex: 1; width: auto; background: #059669;" onclick="downloadImage()">📥 Unduh Gambar</button>
           </div>
-          <` + `script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></` + `script>
+          <` + `script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></` + `script>
           <` + `script>
-            function downloadPDF() {
+            function downloadImage() {
               const element = document.body;
-              const opt = {
-                margin:       10,
-                filename:     'Struk-${b.bookingCode || "Booking"}.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-              };
               const controls = document.getElementById('receiptControls');
               if (controls) controls.style.display = 'none';
-              html2pdf().from(element).set(opt).save().then(() => {
+              html2canvas(element, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#ffffff'
+              }).then(function(canvas) {
+                const imgData = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = 'Struk-${b.bookingCode || "Booking"}.png';
+                link.href = imgData;
+                link.click();
+                if (controls) controls.style.display = 'flex';
+              }).catch(function(err) {
+                console.error(err);
+                alert("Gagal mengunduh gambar.");
                 if (controls) controls.style.display = 'flex';
               });
             }
