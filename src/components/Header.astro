@@ -408,11 +408,7 @@ const isGaleri = pathname.startsWith("/galeri");
     const handleLogout = () => {
       localStorage.removeItem("kgyk_current_user");
       window.dispatchEvent(new CustomEvent("auth-changed"));
-      if ((window as any).showToast) {
-        (window as any).showToast("Anda telah berhasil keluar.", "info");
-      } else {
-        alert("Anda telah berhasil keluar.");
-      }
+      (window as any).showToast("Anda telah berhasil keluar.", "info");
       // Reset hash if it was reservasi
       if (window.location.hash === "#reservasi") {
         window.location.hash = "";

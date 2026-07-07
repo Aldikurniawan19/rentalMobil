@@ -635,9 +635,7 @@ import Footer from '../components/Footer.astro';
               localStorage.setItem("kgyk_bookings", JSON.stringify(bookings));
               renderBookings();
               openReceiptModal(bookings[index]);
-              if ((window as any).showToast) {
-                (window as any).showToast(`Kendaraan telah dilepas & pembayaran diterima!`, 'success');
-              }
+              (window as any).showToast(`Kendaraan telah dilepas & pembayaran diterima!`, 'success');
             }
           });
         });
@@ -679,12 +677,10 @@ import Footer from '../components/Footer.astro';
               localStorage.setItem("kgyk_bookings", JSON.stringify(bookings));
               renderBookings();
               openReceiptModal(bookings[index]);
-              if ((window as any).showToast) {
-                const msg = lateHours > 0
-                  ? `Mobil dikembalikan dengan denda ${formatRupiah(lateFee)} (${lateHours} jam terlambat)`
-                  : `Mobil dikembalikan tepat waktu! Transaksi selesai.`;
-                (window as any).showToast(msg, lateHours > 0 ? 'warning' : 'success');
-              }
+              const msg = lateHours > 0
+                ? `Mobil dikembalikan dengan denda ${formatRupiah(lateFee)} (${lateHours} jam terlambat)`
+                : `Mobil dikembalikan tepat waktu! Transaksi selesai.`;
+              (window as any).showToast(msg, lateHours > 0 ? 'warning' : 'success');
             }
           });
         });
@@ -698,9 +694,7 @@ import Footer from '../components/Footer.astro';
         bookings[index].status = status;
         localStorage.setItem("kgyk_bookings", JSON.stringify(bookings));
         renderBookings();
-        if ((window as any).showToast) {
-          (window as any).showToast(`Pesanan ${bookings[index].bookingCode || '#' + id.toString().slice(-6)} berhasil ${status.toLowerCase()}!`, 'success');
-        }
+        (window as any).showToast(`Pesanan ${bookings[index].bookingCode || '#' + id.toString().slice(-6)} berhasil ${status.toLowerCase()}!`, 'success');
       }
     };
 

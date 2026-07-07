@@ -186,11 +186,7 @@
       (registerForm as HTMLFormElement).reset();
 
       // Trigger success notification
-      if ((window as any).showToast) {
-        (window as any).showToast(`Pendaftaran berhasil! Selamat datang, ${fullName}.`, 'success');
-      } else {
-        alert(`Pendaftaran berhasil! Selamat datang, ${fullName}.`);
-      }
+      (window as any).showToast(`Pendaftaran berhasil! Selamat datang, ${fullName}.`, 'success');
     });
 
     // Form logic: Login
@@ -218,9 +214,7 @@
       (loginForm as HTMLFormElement).reset();
 
       // Trigger success notification
-      if ((window as any).showToast) {
-        (window as any).showToast(`Selamat datang kembali, ${user.fullName}!`, 'success');
-      }
+      (window as any).showToast(`Selamat datang kembali, ${user.fullName}!`, 'success');
     });
   });
 </script>

@@ -323,11 +323,7 @@ const description = "Temukan berbagai pilihan armada mobil terbaik dan terawat d
         const end = new Date(checkEndDate.value);
 
         if (end < start) {
-          if ((window as any).showToast) {
-            (window as any).showToast("Tanggal selesai tidak boleh sebelum tanggal mulai.", "error");
-          } else {
-            alert("Tanggal selesai tidak boleh sebelum tanggal mulai.");
-          }
+          (window as any).showToast("Tanggal selesai tidak boleh sebelum tanggal mulai.", "error");
           return;
         }
 
@@ -418,11 +414,7 @@ const description = "Temukan berbagai pilihan armada mobil terbaik dan terawat d
     // Trigger date search check
     btnCheck?.addEventListener("click", () => {
       if (checkStartDate && checkEndDate && (!checkStartDate.value || !checkEndDate.value)) {
-        if ((window as any).showToast) {
-          (window as any).showToast("Silakan lengkapi tanggal mulai dan selesai sewa terlebih dahulu.", "warning");
-        } else {
-          alert("Silakan lengkapi tanggal mulai dan selesai sewa terlebih dahulu.");
-        }
+        (window as any).showToast("Silakan lengkapi tanggal mulai dan selesai sewa terlebih dahulu.", "warning");
         return;
       }
       filterAndSort(true);

@@ -382,14 +382,10 @@ import { cars } from "../../data/cars";
         localStorage.getItem("kgyk_current_user") || "null",
       );
       if (!currentUser) {
-        if ((window as any).showToast) {
-          (window as any).showToast(
-            "Silakan login terlebih dahulu untuk melakukan pemesanan.",
-            "error",
-          );
-        } else {
-          alert("Silakan login terlebih dahulu untuk melakukan pemesanan.");
-        }
+        (window as any).showToast(
+          "Silakan login terlebih dahulu untuk melakukan pemesanan.",
+          "error",
+        );
         return;
       }
 
@@ -398,11 +394,7 @@ import { cars } from "../../data/cars";
       const selectedCarName = formCar.value;
       const car = cars.find((c) => c.name === selectedCarName);
       if (!car) {
-        if ((window as any).showToast) {
-          (window as any).showToast("Silakan pilih kendaraan.", "error");
-        } else {
-          alert("Silakan pilih kendaraan.");
-        }
+        (window as any).showToast("Silakan pilih kendaraan.", "error");
         return;
       }
 
@@ -412,14 +404,10 @@ import { cars } from "../../data/cars";
       const end = new Date(endDateStr);
 
       if (end < start) {
-        if ((window as any).showToast) {
-          (window as any).showToast(
-            "Tanggal selesai tidak boleh sebelum tanggal mulai.",
-            "error",
-          );
-        } else {
-          alert("Tanggal selesai tidak boleh sebelum tanggal mulai.");
-        }
+        (window as any).showToast(
+          "Tanggal selesai tidak boleh sebelum tanggal mulai.",
+          "error",
+        );
         return;
       }
 
@@ -441,16 +429,10 @@ import { cars } from "../../data/cars";
       });
 
       if (isConflicted) {
-        if ((window as any).showToast) {
-          (window as any).showToast(
-            `Maaf, mobil ${selectedCarName} tidak tersedia pada tanggal tersebut.`,
-            "error",
-          );
-        } else {
-          alert(
-            `Maaf, mobil ${selectedCarName} tidak tersedia pada tanggal tersebut karena sudah di-booking oleh penyewa lain. Silakan pilih tanggal atau jenis kendaraan lain.`,
-          );
-        }
+        (window as any).showToast(
+          `Maaf, mobil ${selectedCarName} tidak tersedia pada tanggal tersebut.`,
+          "error",
+        );
         return;
       }
 
